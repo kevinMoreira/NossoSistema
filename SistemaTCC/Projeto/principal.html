@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Principal | Sistema JP</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width">
+        <!-- <meta http-equiv="Refresh" content="05; url=principal.html" /> -->
+        <link rel="stylesheet" href="css/sistemaJP.css" />
+        <script type="text/javascript" src="js/json.js"></script>
+        <script type="text/javascript" src="js/ajax.js"></script>
+        <script type="text/javascript" src="js/sistemaJP.js"></script>
+        <script type="text/javascript" src="js/principal.js"></script>
+        <script type="text/javascript" src="js/jquery.js"></script>
+        <script type="text/javascript" src="js/Chart/Chart.min.js"></script>
+        <script type="text/javascript" src="js/legend.js"></script>
+        <script type="text/javascript">
+            var $JQuery = jQuery.noConflict()
+        </script>
+    </head>
+    <body>
+        <div id="menu">
+            <div class="identificacao">
+                <label id="nome_usuario"></label>
+            </div>
+        </div>
+        <div id="divbranca" class="divisualizar">
+            <div><h1>DashBoard de Vendas</h1></div>
+            <div id="legenda" style="float: right">
+                <div id="lineLegend"></div>
+            </div>
+            <canvas id="myChart" width="1000" height="400"></canvas>
+        </div>
+    </body>
+</html>
