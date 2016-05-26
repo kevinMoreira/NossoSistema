@@ -30,7 +30,7 @@ function Pesquisar(){
 
     if(pesq=prompt("Buscar Produto pelo nome ou código.")){
 
-        var ajax = new Ajax('POST', 'php/cadastro-de-produtos.php', false);
+        var ajax = new Ajax('POST', './php/Neg/ProdutoNeg.php', false);
 
         var p='action=pesquisarProduto';
         p+='&pesq=' + pesq;
@@ -58,7 +58,7 @@ function Excluir(){
 
         var id_produto = document.getElementById('codigo').value;
 
-        var ajax = new Ajax('POST', 'php/cadastro-de-produtos.php', false);
+        var ajax = new Ajax('POST', './php/Neg/ProdutoNeg.php', false);
 
         var p='action=excluir';
         p+='&id_produto=' + id_produto;
@@ -140,7 +140,7 @@ function Cancelar(){
 
 function Salvar(){
 
-    var ajax = new Ajax('POST', 'php/cadastro-de-produtos.php', false);
+    var ajax = new Ajax('POST', './php/Neg/ProdutoNeg.php', false);
 
     var codigo = document.getElementById('codigo').value;
     var nome = document.getElementById('nome').value;
@@ -165,7 +165,7 @@ function Update(){
 
     if(confirm("Deseja atualizar?")){
 
-        var ajax = new Ajax('POST', 'php/cadastro-de-produtos.php', false);
+        var ajax = new Ajax('POST', './php/Neg/ProdutoNeg.php', false);
         var codigo = document.getElementById('codigo').value;
         var nome = document.getElementById('nome').value;
         var valorVenda = document.getElementById('valorVenda').value;
@@ -186,7 +186,7 @@ function Update(){
 function carregarComboBox(){
 
     var combo = document.getElementById('categoria');
-    var ajax = new Ajax('POST', 'php/cadastro-de-produtos.php', false);
+    var ajax = new Ajax('POST', './php/Neg/ProdutoNeg.php', false);
     var p='action=carregarComboBox';
 
     ajax.Request(p);

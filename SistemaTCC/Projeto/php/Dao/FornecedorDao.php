@@ -38,9 +38,8 @@ class FornecedorDAO {
         $sql=mysql_query($sql, $conexao);
 
          if(mysql_num_rows($sql) <= 0){
-            echo '0';
             mysql_close($conexao);
-            return;
+            return 0;
         }
 
         while($row=mysql_fetch_row($sql)){
@@ -114,42 +113,23 @@ class FornecedorDAO {
     }
 
     //Atualiza endereco na base
-    public function Atualizar($fornecedor){
+    public function Atualizar(Fornecedor $fornecedor){
         session_start();
         $conexao=AbreBancoJP();
 
-        $sql="UPDATE 
-			`fornecedor`
-		SET
-			`nome` = '".$fornecedor->getNome()."',
-			`cnpj` = '".$fornecedor->getCnpj()."',
-			`telefone` '".$fornecedor->getTelefone()."',
-			`email` = '".$fornecedor->getEmail()."',
-			`cep` = '".$fornecedor->getCep()."',
-			`endereco` = '".$fornecedor->getEndereco()."',
-			`numero` = '".$fornecedor->getNumero()."',
-			`complemento` = '".$fornecedor->getComplemento()."',
-			`bairro` = '".$fornecedor->getBairro()."',
-			`cidade` = '".$fornecedor->getCidade()."',
-			`estado` = '".$fornecedor->getUf()."',
-			`status` = 1,
-			`AtualizacaoDataHora` = current_timestamp()
-		WHERE 
-			--`idFornecedor` = $_SESSION[idFornecedor]		
-			--AND
-			`idOrganizacao` = $_SESSION[idOrganizacao]";
+        $sql="UPDATE `fornecedor` SET `nome` = '".$fornecedor->getNome()."',`cnpj` = '".$fornecedor->getCnpj()."',`telefone`= '".$fornecedor->getTelefone()."',`email` = '".$fornecedor->getEmail()."',`cep` = '".$fornecedor->getCep()."',`endereco` = '".$fornecedor->getEndereco()."',`numero` = '".$fornecedor->getNumero()."',`complemento` = '".$fornecedor->getComplemento()."',`bairro` = '".$fornecedor->getBairro()."',`cidade` = '".$fornecedor->getCidade()."',`estado` = '".$fornecedor->getUf()."',`status` = 1,`AtualizacaoDataHora` = current_timestamp() WHERE  `idFornecedor` = ".$fornecedor->getFornecedorId()." AND `idOrganizacao` =". $_SESSION['idOrganizacao'];
 
         mysql_query($sql, $conexao);
 
 
-        $retorno = "1";
+        $retorno = $sql;
 
         mysql_close($conexao);
 
         return $retorno;
     }
 
-     public function Excluir($fornecedor){
+     public function Excluir(Fornecedor $fornecedor){
          session_start();
          $conexao=AbreBancoJP();
 
@@ -160,8 +140,8 @@ class FornecedorDAO {
 			`status` = 0,
 			`AtualizacaoDataHora` = current_timestamp()
 	    WHERE 
---			`idFornecedor` = \".$fornecedor->getIdFornecedor().\"		
---			AND
+			`idFornecedor` = ".$fornecedor->getFornecedorId()."		
+			AND
 			`idOrganizacao` = $_SESSION[idOrganizacao];";
 
          mysql_query($sql, $conexao);

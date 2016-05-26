@@ -30,33 +30,31 @@ function Pesquisar(){
     if(pesq=prompt("Buscar categoria pelo nome ou código.")) {
 
 
-            var ajax = new Ajax('POST', '.php/Neg/CategoriaNeg.php', false);
+        var ajax = new Ajax('POST', './php/Neg/CategoriaNeg.php', false);
 
         var p='action=pesquisarCategoria';
         p+='&pesq=' + pesq;
 
         ajax.Request(p);
-        alert(ajax.getResponseText());
 
         if(ajax.getResponseText()==0){
             alert("Inexistente!");
             return;
         }
 
-        var json = JSON.parse(ajax.getResponseText());;
+        var v =ajax.getResponseText(p);
 
-            if (ajax.getResponseText() == 0) {
-                alert("Inexistente!");
-                return;
+        var json = JSON.parse(v);
 
-            }
+        alert(ajax.getResponseText());
+        if (ajax.getResponseText() == 0) {
+            alert("Inexistente!");
+            return;
 
-            var json = JSON.parse(ajax.getResponseText());
+        }
 
-            // document.getElementById('nome').value = json[1].nome;
-            // document.getElementById('codigo').value = json[0].id_Categoria;
-            document.getElementById('nome').value = json.nome;
-            document.getElementById('codigo').value = json.id_Categoria;
+        document.getElementById('nome').value = json.nome;
+        document.getElementById('codigo').value = json.idCategoria;
 
 
     }
@@ -68,7 +66,7 @@ function Excluir(){
 
         var idCategoria = document.getElementById('codigo').value;
 
-        var ajax = new Ajax('POST', 'php/neg/CategoriasNeg.php', false);
+        var ajax = new Ajax('POST', './php/Neg/CategoriaNeg.php', false);
 
         var p='action=excluir';
         p+='&idCategoria=' + idCategoria;
@@ -113,7 +111,7 @@ function Cancelar(){
 
     Desabilitar(true);
 
-    document.getElementById('nome').value=''; 
+    document.getElementById('nome').value='';
     document.getElementById('codigo').value='';
 
     document.getElementById('editar').setAttribute('src', 'imagens/editar.png');
@@ -144,14 +142,14 @@ function Cancelar(){
 
 function Salvar(){
 
-    var ajax = new Ajax('POST', 'php/Neg/CategoriaNeg.php', false);
+    var ajax = new Ajax('POST', './php/Neg/CategoriaNeg.php', false);
 
     var nome = document.getElementById('nome').value;
-    
-    var p='action=salvarCategoria'; 
+
+    var p='action=salvarCategoria';
 
     p+='&nome=' + nome;
-  
+
     if(confirm("Deseja salvar?")){
         alert(p);
         ajax.Request(p);
@@ -161,22 +159,25 @@ function Salvar(){
         alert("Gravado com sucesso!");
     }
 
-    
+
 }
 
 function Update(){
 
     if(confirm("Deseja atualizar?")){
 
-        var ajax = new Ajax('POST', 'php/neg/CategoriaNeg.php', false);
+        var ajax = new Ajax('POST', './php/Neg/CategoriaNeg.php', false);
         var idCategoria = document.getElementById('codigo').value;
         var nome = document.getElementById('nome').value;
-        var p='action=editarCategoria'; 
+        var p='action=editarCategoria';
 
         p+='&idCategoria=' + idCategoria;
         p+='&nome=' + nome;
+alert(p);
+
 
         ajax.Request(p);
+        alert(ajax.getResponseText());
         Cancelar();
         alert("Atualizado com sucesso!");
     }

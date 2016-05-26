@@ -52,8 +52,7 @@ function Pesquisar(){
 
 
         ajax.Request(p);
-       
-        alert(ajax.getResponseText());
+
         if(ajax.getResponseText()==0){
             alert("Inexistente!");
             return;
@@ -82,12 +81,12 @@ function Excluir(){
 
     if(confirm("Deseja excluir usuário?")){
 
-        var id_fornecedor = document.getElementById('codigo').value;
+        var fornecedorId = document.getElementById('codigo').value;
 
         var ajax = new Ajax('POST', './php/Neg/fornecedorNeg.php', false);
 
         var p='action=excluirFornecedor';
-        p+='&id_fornecedor=' + id_fornecedor;
+        p+='&fornecedorId=' + fornecedorId;
 
         ajax.Request(p);
 
@@ -211,9 +210,8 @@ function Salvar(){
     p+='&status=' + status;
 
     if(confirm("Deseja salvar?")){
-        alert(p);
+
     	ajax.Request(p);
-        alert(ajax.getResponseText());
         if(ajax.getResponseText() == "1"){
             Cancelar();
             alert("Gravado com sucesso!");    
@@ -242,7 +240,7 @@ function Update(){
         var cidade = document.getElementById('cidade').value;
         var uf = document.getElementById('uf').value;
         var status = document.getElementById('status').value;
-        var id_fornecedor = document.getElementById('codigo').value;
+        var fornecedorId = document.getElementById('codigo').value;
 
        
         var p='action=editarFornecedor'; 
@@ -259,14 +257,9 @@ function Update(){
         p+='&cidade=' + cidade;
         p+='&uf=' + uf;
         p+='&status=' + status;
-        p+='&id_fornecedor=' + id_fornecedor;
+        p+='&fornecedorId=' + fornecedorId;
 
         ajax.Request(p);
-
-       // alert(p);
-        ajax.Request(p);
-        alert(ajax.getResponseText());
-
         Cancelar();
         alert("Atualizado com sucesso!");
     }

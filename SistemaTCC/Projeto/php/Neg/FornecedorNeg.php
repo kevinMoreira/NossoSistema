@@ -92,13 +92,13 @@ if (isset($_POST['action'])) {
         return $FornecedorDao->Salvar($objFornecedor);
      }
      
-     public function Excluir(){
+     public function Excluir($objFornecedor){
         $FornecedorDao = new FornecedorDao();
-        $FornecedorDao->Excluir($_POST['fornecedorId']);
+        $FornecedorDao->Excluir($objFornecedor);
      }
      
-     public function Atualizar($objFornecedorEnt){
+     public function Atualizar($objFornecedor){
         $FornecedorDao = new FornecedorDao();
-        $FornecedorDao->Atualizar($objFornecedorEnt);
+        return $FornecedorDao->Atualizar($objFornecedor);
      }
 }

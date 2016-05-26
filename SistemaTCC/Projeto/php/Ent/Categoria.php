@@ -3,12 +3,7 @@ class Categoria{
 	public $idCategoria;
     public $nome;
     public $status;
-
-
-//
-//        function __construct() {
-//
-//        }
+    
 
         function getNome() {
             return $this->nome;

@@ -2,7 +2,7 @@
 /**
  * @author Kevin Rangel Moreira
  * @since data 26/03/2016
- *	classe criada para conexão banco de dados categoria 
+ *	classe criada para conexão banco de dados categoria
  */
 
 
@@ -11,17 +11,17 @@ require_once('../Ent/Categoria.php');
 include '../sistemaJP.php';
 
 
-	class CategoriaDAO {
-		
-		public function Obter($pesq)
-		{
+class CategoriaDAO {
 
-			session_start();
-			$conexao= AbreBancoJP();
+	public function Obter($pesq)
+	{
 
-			$objCategoriaEnt = new Categoria();
+		session_start();
+		$conexao= AbreBancoJP();
 
-					$sql="SELECT 
+		$objCategoriaEnt = new Categoria();
+
+		$sql="SELECT 
 						idCategoria ,
 						nomeCategoria
 				FROM 
@@ -29,42 +29,38 @@ include '../sistemaJP.php';
 				WHERE
 				 --	(idCategoria= ID_CATEGORIA OR ID_CATEGORIA IS NULL)
 				   -- AND
-				    (nomeCategoria LIKE CONCAT('%', ".$pesq.", '%') OR ".$pesq." IS NULL)
+				    (nomeCategoria LIKE CONCAT('%', '$pesq' '%') OR '$pesq'  IS NULL)
 				 AND 
 					status=1
 				AND
-					idOrganizacao = $_SESSION[idOrganizacao];";
+					idOrganizacao =".$_SESSION['idOrganizacao'];
 
-			$sql=mysql_query($sql, $conexao);
+		$sql=mysql_query($sql, $conexao);
 
-			if(mysql_num_rows($sql) <= 0){
-				echo '0';
-				mysql_close($conexao);
-				return;
-			}
-
-			while($row=mysql_fetch_row($sql)){
-
-				$objCategoriaEnt->setIdCategoria($row['0']);
-				$objCategoriaEnt->setNome($row['1']);
-
-
-			}
+		if(mysql_num_rows($sql) <= 0){
 			mysql_close($conexao);
-			return $objCategoriaEnt;
+			return 0;
+		}
 
+		while($row=mysql_fetch_row($sql)){
+
+			$objCategoriaEnt->setIdCategoria($row['0']);
+			$objCategoriaEnt->setNome($row['1']);
 
 
 		}
-			
-			
-		//Salva categria  na base
-		public function Salvar(categoria $categoria)
-		{
-			session_start();
-			$conexao=AbreBancoJP();
+		mysql_close($conexao);
+		return $objCategoriaEnt;
+	}
 
-			$sql="INSERT INTO categoria
+
+	//Salva categria  na base
+	public function Salvar( $categoria)
+	{
+		session_start();
+		$conexao=AbreBancoJP();
+
+		$sql="INSERT INTO categoria
 		(
 			`idOrganizacao`,
 			`nomeCategoria`,
@@ -85,72 +81,72 @@ include '../sistemaJP.php';
 			NULL
         );";
 
-			mysql_query($sql, $conexao);
+		mysql_query($sql, $conexao);
 
 
-			$retorno = "1";
+		$retorno = "1";
 
-			mysql_close($conexao);
+		mysql_close($conexao);
 
-			return $retorno;
-			
-		}
-			
-		
-		//Atualiza categoria na base
-		private function Atualizar(categoria $categoria)
-		{
-			session_start();
-			$conexao=AbreBancoJP();
+		return $retorno;
 
-			$sql="
+	}
+
+
+	//Atualiza categoria na base
+	public function Atualizar(Categoria $categorias)
+	{
+		session_start();
+		$conexao=AbreBancoJP();
+
+		$sql="
 				UPDATE 
 					`categoria`
 				SET
-					`nomeCategoria` = NOME_,
-					`status` = STATUS_,
+					`nomeCategoria` = '".$categorias->getNome()."',
+					`status` = 1,
 					`AtualizacaoDataHora` = current_timestamp()
 				WHERE 
-					`idCategoria` = ID_CATEGORIA
+					`idCategoria` = ".$categorias->getIdCategoria() ."
 				AND
-					`idOrganizacao`= ID_ORGANIZACAO;";
+					`idOrganizacao`=". $_SESSION['idOrganizacao'];
 
-			mysql_query($sql, $conexao);
-
-
-			$retorno = "1";
-
-			mysql_close($conexao);
-
-			return $retorno;
-		}
+		mysql_query($sql, $conexao);
 
 
-		public  function  excluir(categoria $categoria){
-			session_start();
-			$conexao=AbreBancoJP();
+		$retorno = "1";
 
-			$sql="UPDATE 
+		mysql_close($conexao);
+
+		return $retorno;
+	}
+
+
+	public  function  excluir( $categoria){
+		session_start();
+		$conexao=AbreBancoJP();
+
+		$sql="UPDATE 
 				`categoria`
 			SET
 				`status` = 0,
 				`AtualizacaoDataHora` = current_timestamp()
 			WHERE 
-				`idCategoria` = ID_CATEGORIA
+				`idCategoria` = ".$categoria->getIdCategoria()." 
 			AND
-				`idOrganizacao`= ID_ORGANIZACAO;
+				`idOrganizacao`= $_SESSION[idOrganizacao];
 		";
 
 
-			mysql_query($sql, $conexao);
+		mysql_query($sql, $conexao);
 
 
-			$retorno = "1";
+		$retorno = "1";
 
-			mysql_close($conexao);
+		mysql_close($conexao);
 
-			return $retorno;
-		}
-
-		
+		return $retorno;
 	}
+
+
+}
