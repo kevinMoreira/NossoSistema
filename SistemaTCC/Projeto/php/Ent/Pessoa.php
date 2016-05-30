@@ -7,143 +7,372 @@
  */
 
      class Pessoa{
-        private $nome;
-        private $cpf;
-        private $dataNasc;
-        private $telefone;
-        private $celular;
-        private $email;
-        private $cep;
-        private $endereco;
-        private $numero;
-        private $complemento;
-        private $bairo;
-        private $cidade;
-        private $foto;
-        
-        function __construct($nome, $cpf, $dataNasc, $telefone, $celular, $email, $cep, $endereco, $numero, $complemento, $bairo, $cidade, $foto) {
-            $this->nome = $nome;
-            $this->cpf = $cpf;
-            $this->dataNasc = $dataNasc;
-            $this->telefone = $telefone;
-            $this->celular = $celular;
-            $this->email = $email;
-            $this->cep = $cep;
-            $this->endereco = $endereco;
-            $this->numero = $numero;
-            $this->complemento = $complemento;
-            $this->bairo = $bairo;
-            $this->cidade = $cidade;
-            $this->foto = $foto;
+         public $nome;
+         public $cpf;
+         public $dataNasc;
+         public $telefone;
+         public $celular;
+         public $email;
+         public $cep;
+         public $endereco;
+         public $numero;
+         public $complemento;
+         public $bairo;
+         public $cidade;
+         public $foto;
+         public $status;
+         public $uf;
+         public $estado;
+         public $idOrganizacao;
+         public $dataHoraCadastro;
+         public $dataHoraAtualizacao;
+         public $idUsuario;
+         public $idUsuarioAtulaizacao;
+
+         /**
+          * @return mixed
+          */
+         public function getDataHoraAtualizacao()
+         {
+             return $this->dataHoraAtualizacao;
+         }
+
+         /**
+          * @param mixed $dataHoraAtualizacao
+          */
+         public function setDataHoraAtualizacao($dataHoraAtualizacao)
+         {
+             $this->dataHoraAtualizacao = $dataHoraAtualizacao;
+         }
+
+         /**
+          * @return mixed
+          */
+         public function getIdUsuarioAtulaizacao()
+         {
+             return $this->idUsuarioAtulaizacao;
+         }
+
+         /**
+          * @param mixed $idUsuarioAtulaizacao
+          */
+         public function setIdUsuarioAtulaizacao($idUsuarioAtulaizacao)
+         {
+             $this->idUsuarioAtulaizacao = $idUsuarioAtulaizacao;
+         }
+
+         /**
+          * @return mixed
+          */
+         public function getDataHoraCadastro()
+         {
+             return $this->dataHoraCadastro;
+         }
+
+         /**
+          * @param mixed $dataHoraCadastro
+          */
+         public function setDataHoraCadastro($dataHoraCadastro)
+         {
+             $this->dataHoraCadastro = $dataHoraCadastro;
+         }
+
+
+        function __construct() {
+
         }
 
-        
-        function getNome() {
-            return $this->nome;
-        }
+         /**
+          * @return mixed
+          */
+         public function getIdOrganizacao()
+         {
+             return $this->idOrganizacao;
+         }
 
-        function setNome($nome) {
-            $this->nome = $nome;
-        }        
-        
-        function getCpf() {
-            return $this->cpf;
-        }
+         /**
+          * @param mixed $idOrganizacao
+          */
+         public function setIdOrganizacao($idOrganizacao)
+         {
+             $this->idOrganizacao = $idOrganizacao;
+         }
+         
 
-        function getDataNasc() {
-            return $this->dataNasc;
-        }
+         /**
+          * @return mixed
+          */
+         public function getEstado()
+         {
+             return $this->estado;
+         }
 
-        function getTelefone() {
-            return $this->telefone;
-        }
+         /**
+          * @param mixed $estado
+          */
+         public function setEstado($estado)
+         {
+             $this->estado = $estado;
+         }
 
-        function getCelular() {
-            return $this->celular;
-        }
+         
+         /**
+          * @return mixed
+          */
+         public function getNome()
+         {
+             return $this->nome;
+         }
 
-        function getEmail() {
-            return $this->email;
-        }
+         /**
+          * @param mixed $nome
+          */
+         public function setNome($nome)
+         {
+             $this->nome = $nome;
+         }
 
-        function getCep() {
-            return $this->cep;
-        }
+         /**
+          * @return mixed
+          */
+         public function getCpf()
+         {
+             return $this->cpf;
+         }
 
-        function getEndereco() {
-            return $this->endereco;
-        }
+         /**
+          * @param mixed $cpf
+          */
+         public function setCpf($cpf)
+         {
+             $this->cpf = $cpf;
+         }
 
-        function getNumero() {
-            return $this->numero;
-        }
+         /**
+          * @return mixed
+          */
+         public function getDataNasc()
+         {
+             return $this->dataNasc;
+         }
 
-        function getComplemento() {
-            return $this->complemento;
-        }
+         /**
+          * @param mixed $dataNasc
+          */
+         public function setDataNasc($dataNasc)
+         {
+             $this->dataNasc = $dataNasc;
+         }
 
-        function getBairo() {
-            return $this->bairo;
-        }
+         /**
+          * @return mixed
+          */
+         public function getTelefone()
+         {
+             return $this->telefone;
+         }
 
-        function getCidade() {
-            return $this->cidade;
-        }
+         /**
+          * @param mixed $telefone
+          */
+         public function setTelefone($telefone)
+         {
+             $this->telefone = $telefone;
+         }
 
-        function getFoto() {
-            return $this->foto;
-        }
+         /**
+          * @return mixed
+          */
+         public function getCelular()
+         {
+             return $this->celular;
+         }
 
-        function setCpf($cpf) {
-            $this->cpf = $cpf;
-        }
+         /**
+          * @param mixed $celular
+          */
+         public function setCelular($celular)
+         {
+             $this->celular = $celular;
+         }
 
-        function setDataNasc($dataNasc) {
-            $this->dataNasc = $dataNasc;
-        }
+         /**
+          * @return mixed
+          */
+         public function getEmail()
+         {
+             return $this->email;
+         }
 
-        function setTelefone($telefone) {
-            $this->telefone = $telefone;
-        }
+         /**
+          * @param mixed $email
+          */
+         public function setEmail($email)
+         {
+             $this->email = $email;
+         }
 
-        function setCelular($celular) {
-            $this->celular = $celular;
-        }
+         /**
+          * @return mixed
+          */
+         public function getCep()
+         {
+             return $this->cep;
+         }
 
-        function setEmail($email) {
-            $this->email = $email;
-        }
+         /**
+          * @param mixed $cep
+          */
+         public function setCep($cep)
+         {
+             $this->cep = $cep;
+         }
 
-        function setCep($cep) {
-            $this->cep = $cep;
-        }
+         /**
+          * @return mixed
+          */
+         public function getEndereco()
+         {
+             return $this->endereco;
+         }
 
-        function setEndereco($endereco) {
-            $this->endereco = $endereco;
-        }
+         /**
+          * @param mixed $endereco
+          */
+         public function setEndereco($endereco)
+         {
+             $this->endereco = $endereco;
+         }
 
-        function setNumero($numero) {
-            $this->numero = $numero;
-        }
+         /**
+          * @return mixed
+          */
+         public function getNumero()
+         {
+             return $this->numero;
+         }
 
-        function setComplemento($complemento) {
-            $this->complemento = $complemento;
-        }
+         /**
+          * @param mixed $numero
+          */
+         public function setNumero($numero)
+         {
+             $this->numero = $numero;
+         }
 
-        function setBairo($bairo) {
-            $this->bairo = $bairo;
-        }
+         /**
+          * @return mixed
+          */
+         public function getComplemento()
+         {
+             return $this->complemento;
+         }
 
-        function setCidade($cidade) {
-            $this->cidade = $cidade;
-        }
+         /**
+          * @param mixed $complemento
+          */
+         public function setComplemento($complemento)
+         {
+             $this->complemento = $complemento;
+         }
 
-        function setFoto($foto) {
-            $this->foto = $foto;
-        }
+         /**
+          * @return mixed
+          */
+         public function getBairo()
+         {
+             return $this->bairo;
+         }
+
+         /**
+          * @param mixed $bairo
+          */
+         public function setBairo($bairo)
+         {
+             $this->bairo = $bairo;
+         }
+
+         /**
+          * @return mixed
+          */
+         public function getCidade()
+         {
+             return $this->cidade;
+         }
+
+         /**
+          * @param mixed $cidade
+          */
+         public function setCidade($cidade)
+         {
+             $this->cidade = $cidade;
+         }
+
+         /**
+          * @return mixed
+          */
+         public function getFoto()
+         {
+             return $this->foto;
+         }
+
+         /**
+          * @param mixed $foto
+          */
+         public function setFoto($foto)
+         {
+             $this->foto = $foto;
+         }
+
+         /**
+          * @return mixed
+          */
+         public function getStatus()
+         {
+             return $this->status;
+         }
+
+         /**
+          * @param mixed $status
+          */
+         public function setStatus($status)
+         {
+             $this->status = $status;
+         }
+
+         /**
+          * @return mixed
+          */
+         public function getUf()
+         {
+             return $this->uf;
+         }
+
+         /**
+          * @param mixed $uf
+          */
+         public function setUf($uf)
+         {
+             $this->uf = $uf;
+         }
 
 
-        
+         public function setIdUsuario($idUsuario)
+         {
+             $this->idUsuario = $idUsuario;
+         }
+
+         /**
+          * @return mixed
+          */
+         public function getDepartamento()
+         {
+             return $this->departamento;
+         }
+
+         /**
+          * @param mixed $departamento
+          */
         
         
         
