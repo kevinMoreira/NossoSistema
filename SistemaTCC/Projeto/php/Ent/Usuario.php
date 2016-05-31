@@ -5,11 +5,22 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-    class usuario extends Pessoa{
-            private $login;
-            private $senha;
-            private $permicao;
+include 'Pessoa.php';
+
+class Usuario extends Pessoa{
+            public $login;
+            public $senha;
+            public $permicao;
+            public $idDepartamento;
             
+            public $departamento;
+
+
+    public function setDepartamento($departamento)
+    {
+        $this->departamento = $departamento;
+    }
+
             function _constuct($login,$senha){
                 $this-> login=$login;
                 $this->senha= $senha;
@@ -39,12 +50,37 @@
                 $this->permicao = $permicao;
             }
 
+        /**
+         * @return mixed
+         */
+        public function getIdDepartamento()
+        {
+            return $this->idDepartamento;
+        }
+
+        /**
+         * @param mixed $idDepartamento
+         */
+        public function setIdDepartamento($idDepartamento)
+        {
+            $this->idDepartamento = $idDepartamento;
+        }
+
+        /**
+         * @return mixed
+         */
+        public function getIdUsuario()
+        {
+            return $this->idUsuario;
+        }
+
+        /**
+         * @param mixed $idUsuario
+         */
+     
+
             
-            
-           function Logar(){
-             
-         }   
-        
+
     }
     
 ?>
