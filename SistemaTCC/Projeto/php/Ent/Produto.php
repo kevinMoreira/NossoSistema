@@ -4,9 +4,26 @@ class Produto{
     public $valor;
     public $status;
     public $codigoBarras;
+    public $produtoId;
+    public $categoriaId;
+
+    
+    public function getCategoriaoId(){
+        return $this->categoriaId;
+    }
+
+    public function setCategoriaId($categoriaId){
+        $this->categoriaId=$categoriaId;
+    }
 
 
+    public function getProdutoId(){
+        return $this->produtoId;
+    }
 
+    public function setProdutoId($produtoId){
+        $this->produtoId=$produtoId;
+    }
 
     function getNome() {
         return $this->nome;
@@ -58,6 +75,3 @@ class Produto{
 
 
 }
-
-
-?>
