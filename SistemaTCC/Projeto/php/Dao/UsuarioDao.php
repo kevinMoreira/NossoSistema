@@ -206,7 +206,10 @@ class UsuarioDao
         return $retorno;
     }
 
-    public function Atualizar(Usuario $objUsuario)
+    public function Atualizar($codigo,$nome,$cpf,$data_nascimento
+        ,$telefone,$celular, $email, $cep, $endereco,
+                              $numero,$complemento,$bairro,$cidade,$uf,$login
+        ,$senha,$status,$cod)
     {
         session_start();
         $conexao = AbreBancoJP();
@@ -215,27 +218,27 @@ class UsuarioDao
 			`usuarios`
 		SET
 
-			`nome` = '".$objUsuario->getNome()."',
-			`cpf` = '".$objUsuario->getCpf()."',
-			`data_nascimento` = '".$objUsuario->getDataNasc()."',
-			`telefone` = '".$objUsuario->getTelefone()."',
-			`celular` = '".$objUsuario->getCelular()."',
-			`email` = '".$objUsuario->getEmail()."',
-			`cep` = '".$objUsuario->getCep()."',
-            `complemento` = '".$objUsuario->getComplemento()."',
-            `numero` = '".$objUsuario->getNumero()."',
+			`nome` = '".$nome."',
+			`cpf` = '".$cpf."',
+			`data_nascimento` = '".$data_nascimento."',
+			`telefone` = '".$telefone."',
+			`celular` = '".$celular."',
+			`email` = '".$email()."',
+			`cep` = '".$cep()."',
+            `complemento` = '".$complemento()."',
+            `numero` = '".$numero()."',
 			`status`=1,
 			`AtualizacaoDataHora` = current_timestamp(),
-			`AtualizacaoUsuarioId` = ".$objUsuario->getIdUsuario().",
-            `login` = '".$objUsuario->getLogin()."',
-            `senha` = '".$objUsuario->getSenha()."',
-            `endereco` = '".$objUsuario->getEndereco()."',
-            `bairro` =  '".$objUsuario->getBairo()."',
-            `cidade` = '".$objUsuario->getCidade()."',
-            `estado` = '".$objUsuario->getEstado()."'
-			`AtualizacaoUsuarioId` = ".$objUsuario->getIdUsuario()."
+			`AtualizacaoUsuarioId` = ".$codigo().",
+            `login` = '".$login()."',
+            `senha` = '".$senha()."',
+            `endereco` = '".$endereco()."',
+            `bairro` =  '".$bairro()."',
+            `cidade` = '".$cidade()."',
+            `estado` = '".$uf()."'
+			`AtualizacaoUsuarioId` = ".$codigo()."
 		WHERE
-			`idUsuario` = ".$objUsuario->getIdUsuario()."
+			`idUsuario` = ".$codigo()."
 		AND
 			`idOrganizacao`= ".$_SESSION[idOrganizacao];
 
