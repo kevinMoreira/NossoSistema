@@ -4,79 +4,175 @@
  * @since 26/03/2016
  * classe conexão banco de dados com a classe produto
  */
-require_once('../MySQL.php');
+include '../sistemaJP.php';
 require_once('../Ent/Produto.php');
-//adicionando classes da categoria
-require_once('../Ent/Categoria.php');
-require_once ('../Dao/dCategoria.php');
+//adicionando classes da catego
 
 
-class dProduto{
-	public function Obter(){
-		$conexao= new MySQL();
-		$objProduto = new Produto();
-		
+class ProdutoDao{
 
-		$sql="set  ('','','','','','','',3,@PESQUISA) = '$pesquisa'; call USP_MANTER_PRODUTOS('','','','','','','',3,@PESQUISA);";
-		$retorno = $conexao->execSP($sql);
-		if($retorno != null)
-		{
-
-			$objProduto->setCodigo($retorno["CODIGO"]);
-			$objProduto->setNome($retorno["NOME"]);
-			$objProduto->setValor($retorno["VALOR_VENDA"]);
-			$objProduto->setCategoria($retorno["NOME_CATEGORIA"]);
-			$objProduto->setCategoria($retorno["ID_CATEGORIA"]);
-		}
 	
-		else{
-			$objProduto = $this->ConsultarWebServiceProduto($pesquisa);
-			$this->Salvar($objProduto);
-		}
-			return $objProduto;
-	}
 	
-	//Retorna endereÃ§o consultado no web service apimon
-	private function ConsultarWebServiceEndereco($pesquisa){
+	
+
+	public function Obter($pesq)
+	{
+		session_start();
+		$conexao= AbreBancoJP();
+
 		$objProduto = new Produto();
-		$jsonProduto = file_get_contents('http://api.postmon.com.br/v1/cep/'.$pesquisa);
-		$objProduto->setLogradouro(utf8_decode($jsonEndereco["Logradouro"]));
-		$objProduto->setCodigo(utf8_decode($jsonProduto["CODIGO"]));
-		$objProduto->setNome(utf8_decode($jsonProduto["NOME"]));
-		$objProduto->setValor(utf8_decode($jsonProduto["VALOR_VENDA"]));
-		$objProduto->setCategoria(utf8_decode($jsonProduto["NOME_CATEGORIA"]));
-		$objProduto->setCategoria(utf8_decode($jsonProduto["ID_CATEGORIA"]));
+
+		$sql="SELECT 
+				`produto`.`idProduto`,
+				`produto`.`idCategoria`,
+				`produto`.`nome`,
+				`produto`.`valorVenda`,
+				`produto`.`status`,
+				`produto`.`CodigoDeBarras`
+			FROM 
+				`estoque`.`produto`
+			WHERE 
+				status=1
+			and 
+				nome = '".$pesq."'
+			AND
+				idOrganizacao =".$_SESSION['idOrganizacao'];
+
+		$sql=mysql_query($sql, $conexao);
+
+		if(mysql_num_rows($sql) <= 0){
+			mysql_close($conexao);
+			return 0;
+		}
+
+		while($row=mysql_fetch_row($sql)){
+
+			$objProduto->setProdutoId($row[0]);
+			$objProduto->setCategoriaId($row[1]);
+			$objProduto->setNome($row[2]);
+			$objProduto->setValor($row[3]);
+			$objProduto->setStatus($row[4]);
+			$objProduto->setCodigoBarras($row[5]);
+		}
+		mysql_close($conexao);
 		return $objProduto;
 	}
-	
-	
-	//Salva endereco na base
-	private function Salvar(Produto $produto, $categoria){
-		$conexao= new MySQL();
-		$objProduto= new Produto();
-		//inserindo id da categoria
-		$objCategoria = new Categoria();
-		$dcategoria = new dCategotia(); 
-		$objCategoria = $dcategoria->Obter($categoria);
-		//pegando id da organixacao
-		
-		$objOrganizacao = new Organizacao();
-		$dOrganizacao = new dOrganizacao();
-		$objOrganizacao = $dOrganizacao->Obter($nome); 
-		
-// 		ID_ORGANIZACAO,
-// 		ID_CATEGORIA,
-// 		NOME_,
-// 		VALOR_VENDA,
-		
-		
-		//Seleciona endereÃ§o na base
-		$sql="set @ID_ORGANIZACAO = '$endereco->getCep()';
-		set @ID_CATEGORIA = '$endereco->getLogradouro()';
-		set @BAIRRO = '$endereco->getBairro()';
-		set @NOME_ = '$endereco->getCidade()';
-		set @VALOR_VENDA = '$endereco->getEstado()';
-		call USP_INS_ENDERECO(,0);";
-		$retorno = $conexao->execSP($sql);
+
+
+	//Salva categria  na base
+	public function Salvar(Produto $produto)
+	{
+		session_start();
+		$conexao=AbreBancoJP();
+
+		$sql="
+        INSERT INTO `estoque`.`produto`
+		(
+			`idOrganizacao`,
+			`idCategoria`,
+			`nome`,
+			`valorVenda`,
+			`status`,
+			`CadastroDataHora`,
+			`CodigoDeBarras`
+		)
+		VALUES
+		(
+			$_SESSION[idOrganizacao],
+			".$produto->getCategoriaoId().",
+			'".$produto->getNome()."',
+			".$produto->getValor().",
+			1,
+			current_timestamp(),
+			'".$produto->getCodigoBarras()."'
+		);
+";
+
+		mysql_query($sql, $conexao);
+
+		$retorno = $sql;
+		mysql_close($conexao);
+		return $retorno;
+	}
+
+
+	//Atualiza categoria na base
+	public function Atualizar(Produto $produto)
+	{
+		session_start();
+		$conexao=AbreBancoJP();
+
+		$sql="
+		UPDATE 
+			`produto`
+		SET
+			`idCategoria` = ".$produto->getCategoriaoId().",
+			`nome` = '".$produto->getNome()."',
+			`valorVenda` = ".$produto->getValor().",
+			`AtualizacaoDataHora` = current_timestamp(),
+			`CodigoDeBarras` =".$produto->getCodigoBarras()."
+		WHERE 
+			`idProduto` = ".$produto->getProdutoId()."
+			and 
+			`idOrganizacao` = $_SESSION[idOrganizacao]";
+
+		mysql_query($sql, $conexao);
+		$retorno = "1";
+		mysql_close($conexao);
+		return $retorno;
+	}
+
+
+	public  function  Excluir( Produto $produto){
+		session_start();
+		$conexao=AbreBancoJP();
+
+		$sql="
+		UPDATE 
+			`produto`
+		SET
+			status = 0,
+			`AtualizacaoDataHora` = current_timestamp()
+		WHERE 
+			`idProduto` = ".$produto->getProdutoId()."
+			and 
+			`idOrganizacao` = $_SESSION[idOrganizacao]";
+
+		mysql_query($sql, $conexao);
+		$retorno = "1";
+		mysql_close($conexao);
+
+		return $retorno;
+	}
+
+	public function CarregarComboBox(){
+		session_start();
+		$conexao= AbreBancoJP();
+
+		$sql="SELECT 
+						idCategoria ,
+						nomeCategoria
+				FROM 
+					categoria 
+				WHERE 
+					status=1
+				AND
+					idOrganizacao =".$_SESSION['idOrganizacao'];
+
+		$sql=mysql_query($sql, $conexao);
+
+		if(mysql_num_rows($sql) <= 0){
+			mysql_close($conexao);
+			return 0;
+		}
+
+		while($row=mysql_fetch_row($sql)){
+			$json[] = array(
+				'id_categoria' => $row[0],
+				'nome_categoria'=>$row[1]
+			);
+		}
+		mysql_close($conexao);
+		return $json;
 	}
 }
