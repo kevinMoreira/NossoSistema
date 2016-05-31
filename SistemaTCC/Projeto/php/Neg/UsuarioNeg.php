@@ -83,11 +83,15 @@ if (isset($_POST['action'])){
 //            echo $teste;
 //            break;
 
+
         case 'editarUsuario':
-            $teste= $objUsuarioNeg->Atualizar($_POST['codigo']);
+            $teste= $objUsuarioNeg->Atualizar($_POST['codigo'],$_POST['nome'],$_POST['cpf'],$_POST['data_nascimento']
+            ,$_POST['telefone'],$_POST['celular'], $_POST['email'], $_POST['cep'], $_POST['endereco'], 
+            $_POST['numero'],$_POST['complemento'],$_POST['bairro'],$_POST['cidade'],$_POST['uf'],$_POST['login']
+            ,$_POST['senha'],$_POST['status'],$_POST['codigo']
+            );
             echo $teste;
             break;
-
 
 //        case 'excluir':
 //           $teste=$objUsuarioNeg->Excluir($objUsuarioEnt);
@@ -141,9 +145,21 @@ class UsuarioNeg
 
     }
 
-    public function Atualizar(Usuario $objUsuario){
+//    public function Atualizar(Usuario $objUsuario){
+//        $UsuarioDao = new UsuarioDao();
+//        return $UsuarioDao->Atualizar($objUsuario);
+//    }
+
+
+    public function Atualizar($codigo,$nome,$cpf,$data_nascimento
+            ,$telefone,$celular, $email, $cep, $endereco, 
+            $numero,$complemento,$bairro,$cidade,$uf,$login
+            ,$senha,$status,$cod){
         $UsuarioDao = new UsuarioDao();
-        return $UsuarioDao->Atualizar($objUsuario);
+        return $UsuarioDao->Atualizar($codigo,$nome,$cpf,$data_nascimento
+            ,$telefone,$celular, $email, $cep, $endereco,
+            $numero,$complemento,$bairro,$cidade,$uf,$login
+            ,$senha,$status,$cod);
     }
 
 //    public function Excluir(Usuario $objUsuario){
