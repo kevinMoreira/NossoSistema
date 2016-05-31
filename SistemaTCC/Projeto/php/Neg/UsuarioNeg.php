@@ -78,14 +78,25 @@ if (isset($_POST['action'])){
             echo $teste;
             break;
 
+//        case 'editarUsuario':
+//            $teste= $objUsuarioNeg->Atualizar($objUsuarioEnt);
+//            echo $teste;
+//            break;
+
         case 'editarUsuario':
-            $teste= $objUsuarioNeg->Atualizar($objUsuarioEnt);
+            $teste= $objUsuarioNeg->Atualizar($_POST['codigo']);
             echo $teste;
             break;
 
 
+//        case 'excluir':
+//           $teste=$objUsuarioNeg->Excluir($objUsuarioEnt);
+//            echo $teste;
+//            break;
+
         case 'excluir':
-           $teste=$objUsuarioNeg->Excluir($objUsuarioEnt);
+            $teste=$objUsuarioNeg->Excluir($_POST['id_usuario']);
+//            $teste=$objUsuarioNeg->Excluir($_POST['login']);
             echo $teste;
             break;
 
@@ -135,11 +146,15 @@ class UsuarioNeg
         return $UsuarioDao->Atualizar($objUsuario);
     }
 
-    public function Excluir(Usuario $objUsuario){
-        $UsuarioDao = new UsuarioDao();
-        return $UsuarioDao->Excluir($objUsuario);
-    }
+//    public function Excluir(Usuario $objUsuario){
+//        $UsuarioDao = new UsuarioDao();
+//        return $UsuarioDao->Excluir($objUsuario);
+//    }
 
+    public function Excluir($valor){
+        $UsuarioDao = new UsuarioDao();
+        return $UsuarioDao->Excluir($valor);
+    }
 
 //    public function subMenu(){
 //        $UsuarioDao = new UsuarioDao();
