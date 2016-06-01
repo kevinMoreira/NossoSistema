@@ -20,7 +20,7 @@ function pesquisarProduto(){//carrega produto e categoria pelo código
     ajax.Request(p);
 
     var json = JSON.parse(ajax.getResponseText());
-
+    alert(ajax.getResponseText());
     comboProd.options[0] = new Option(json[0].nome, json[0].idProduto);
     comboCat.options[0] = new Option(json[0].nomeCategoria, json[0].idCategoria);
 
@@ -188,10 +188,13 @@ function Salvar(){
     p+='&qtde=' + qtde;
     p+='&valorCompra=' + valorCompra;
     p+='&validade=' + validade;
-  
+    alert(p);
     if(confirm("Deseja salvar?")){
+        
         ajax.Request(p);
-
+        
+        alert(ajax.getResponseText());
+        
         Cancelar();
         alert("Gravado com sucesso!");
     }
@@ -215,6 +218,9 @@ function Update(){
   
     if(confirm("Deseja atualizar?")){
         ajax.Request(p);
+        alert(p);
+
+        alert(ajax.getResponseText());
         Cancelar();
         alert("Atualizado com sucesso!");
     }        
