@@ -137,11 +137,27 @@ function salvarCompraProduto(){
 
    //Para isso ela precisa estar no fuso horário de são paulo setado no inicio do programa
 
-    $sql="INSERT INTO loteprodutos VALUES ('', '$_SESSION[idOrganizacao]', '$_POST[id_produto]', '$_POST[id_fornecedor]', '$_POST[valorCompra]','$_POST[qtde]', '$_POST[validade]',curdate(), 1)";
-
+//    $sql="INSERT INTO loteprodutos VALUES ('', '$_SESSION[idOrganizacao]', '$_POST[id_produto]', '$_POST[id_fornecedor]', '$_POST[valorCompra]','$_POST[qtde]', '$_POST[validade]',curdate(), 1)";
+//    $sql="INSERT INTO loteprodutos VALUES ('', 1, ".$_POST['id_produto'].", ".$_POST['id_fornecedor'].",".$_POST['valorCompra'].",".$_POST['qtde'].",".$_POST['validade'].",curdate(), 1)";
+    $sql="INSERT INTO loteprodutos (idOrganizacao, idProduto,
+    idFornecedor,valorCompra,qtde,
+    validade,data,status) 
+ VALUES (   
+    1 
+    ,".$_POST['id_produto']."
+    , ".$_POST['id_fornecedor']."
+    ,".$_POST['valorCompra']."
+    ,".$_POST['qtde']."
+    ,".$_POST['validade']."
+    ,curdate()
+    , 1
+   
+    
+    )";
     $sql = mysql_query($sql, $conexao);
 
     mysql_close($conexao);
+
 }
 
 function pesquisarCompraProduto(){
@@ -204,9 +220,24 @@ function editarCompraProduto(){
     session_start();
     $conexao=AbreBancoJP();
 
-    $sql="UPDATE loteprodutos set idFornecedor='$_POST[id_fornecedor]', valorCompra='$_POST[valorCompra]', validade='$_POST[validade]', qtde = '$_POST[qtde]'
-    WHERE idLote = $_POST[idLote] and status=1 and idOrganizacao=". $_SESSION['idOrganizacao'];
+//    $sql="UPDATE loteprodutos set idFornecedor='$_POST[id_fornecedor]', valorCompra='$_POST[valorCompra]', validade='$_POST[validade]', qtde = '$_POST[qtde]'
+//    WHERE idLote = $_POST[idLote] and status=1 and idOrganizacao=". $_SESSION['idOrganizacao'];
 
+//    $sql="UPDATE loteprodutos set
+//            idFornecedor=".$_POST['id_fornecedor']."
+//            ,valorCompra=".$_POST['valorCompra']."
+//            , validade=".$_POST['validade']."
+//            , qtde = ".$_POST['qtde']."
+//    WHERE idLote = ".$_POST['idLote']." and status=1 and idOrganizacao=". $_SESSION['idOrganizacao'];
+
+    print "<script> alert($_POST[id_fornecedor]) </script>";
+
+    $sql="UPDATE loteprodutos set 
+          
+            valorCompra='$_POST[valorCompra]'
+            , validade='$_POST[validade]'
+            , qtde = '$_POST[qtde]'
+    WHERE idLote = '$_POST[idLote]' and status=1 and idOrganizacao= $_SESSION[idOrganizacao];";
     mysql_query($sql, $conexao);
     mysql_close($conexao);
 
