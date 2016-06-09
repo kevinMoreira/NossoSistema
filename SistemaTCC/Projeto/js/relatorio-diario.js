@@ -1,4 +1,6 @@
-﻿$(document).ready(function () {
+﻿
+$(document).ready(function () {
+
     VerificaSessao();
     getDadosUsuario();
     MontaMenu();
@@ -10,7 +12,7 @@
 });
 
 function busca() {
-
+    javascript:window.location.href=('php/Relatorios/relatorioDiario.php');
     var pesquisa = $JQuery("#pesq").val();//pega o valor contido no input pesq que foi selecionado acima
 
     var pesq = 'action=relatorioDiario';
