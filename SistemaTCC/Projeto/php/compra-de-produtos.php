@@ -156,6 +156,21 @@ function salvarCompraProduto(){
     )";
     $sql = mysql_query($sql, $conexao);
 
+
+    $sql="INSERT INTO loteprodutosbaixa (
+LoteProdutosId, 
+Quantidade,
+    CadastroDataHora,
+    CadastroUsuarioId,
+    FlagStatus) 
+ VALUES (   
+   (select max(idLote) from loteprodutos)
+     ,".$_POST['qtde']."
+     ,curdate()
+     ,(select idProduto from loteprodutos where idLote=(select max(idLote) from loteprodutos))
+     ,1);";
+    $sql = mysql_query($sql, $conexao);
+
     mysql_close($conexao);
 
 }
