@@ -130,18 +130,30 @@ function baixaEstoque() {//dá baixa no estoque seguindo a regra de negócio
 				 lp.idOrganizacao=$_SESSION[idOrganizacao]
 				 and
 				
-				lpb.LoteProdutosId = lp.idLote
-				
-				
-				;";
+				lpb.LoteProdutosId = lp.idLote;";
 				$qtdeTotalProd = mysql_query($qtdeTotalProd, $conexao);
 				$qtdeTotalProd = mysql_fetch_row($qtdeTotalProd);
 
 				$qtdeRestante = $qtdeTotalProd[0] - $qtde[0];
 
 				//Pega produto com o prazo de validade mais próximo do vencimento orderby desc
-				$qtdeBanco = "select qtde, validade,idlote from loteprodutos
-			    where idProduto = '$idProduto[$i]' and status=1 and idOrganizacao=". $_SESSION['idOrganizacao'] ." order by validade desc limit 1";
+//				$qtdeBanco = "select qtde, validade,idlote from loteprodutos
+//			    where idProduto = '$idProduto[$i]' and status=1 and idOrganizacao=". $_SESSION['idOrganizacao'] ." order by validade desc limit 1";
+				$qtdeBanco="select 
+								lb.Quantidade, 
+								l.validade, 
+								l.idlote 
+								
+								from loteprodutos l,
+								loteprodutosbaixa lb
+								
+								where 
+								l.idProduto = '$idProduto[$i]'
+								and l.status=1
+								and l.idLote = lb.LoteProdutosId 
+								and l.idOrganizacao= ". $_SESSION['idOrganizacao'] ."
+								order by l.validade desc limit 1;
+								";
 
 				$qtdeBanco = mysql_query($qtdeBanco, $conexao);
 
@@ -161,12 +173,12 @@ function baixaEstoque() {//dá baixa no estoque seguindo a regra de negócio
 
 				while($row = mysql_fetch_row($qtdeBanco)){
 					$qtdeRestante = $qtdeRestante - $row[0];
-//					print 'entrou no while';
+					print 'entrou no while';
 
 					if($qtdeRestante < 0 && $flag != 1){
 						$validade = $row[1];
 						$qtdeRestante = $qtdeRestante * (-1);
-//						print 'passou aqui';
+						print 'passou aqui';
 
 						if(($row[0] - $qtdeRestante) <= 0){
 							$updateQtde = "
@@ -177,7 +189,7 @@ function baixaEstoque() {//dá baixa no estoque seguindo a regra de negócio
 							$updateQtde = mysql_query($updateQtde);
 
 
-//							echo '0';
+							echo '0';
 						}else{
 							$updateQtde ="						 
 											UPDATE loteprodutosbaixa set Quantidade = '$row[0]' - '$qtdeRestante'
@@ -185,16 +197,14 @@ function baixaEstoque() {//dá baixa no estoque seguindo a regra de negócio
 
 
 							$updateQtde = mysql_query($updateQtde);
-//							echo '1';
-//							echo $updateQtde;
+							echo '1';
+							echo $updateQtde;
 						}
 
 						$flag=1;
 					}else if($flag == 1){
 						print 'não passou';
-						$updateQtde = "
-											 
-											UPDATE loteprodutosbaixa set Quantidade = 0 
+						$updateQtde = "UPDATE loteprodutosbaixa set Quantidade = 0 
 											where LoteProdutosId = ".$row[2];
 						$updateQtde = mysql_query($updateQtde);
 //						echo '2';
