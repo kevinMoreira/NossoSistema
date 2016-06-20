@@ -127,11 +127,64 @@ function salvarUsuario(){
     session_start();
     $conexao=AbreBancoJP();
 
-    $sql="INSERT INTO usuarios VALUES 
+   /* $sql="INSERT INTO usuarios VALUES
     ('', '$_SESSION[idOrganizacao]', '$_POST[idDepartamento]', '$_POST[nome]','$_POST[cpf]','$_POST[data_nascimento]','$_POST[telefone]',
         '$_POST[celular]','$_POST[cep]','$_POST[endereco]','$_POST[numero]',
         '$_POST[complemento]','$_POST[bairro]','$_POST[cidade]','$_POST[uf]',
-        '$_POST[email]',md5('$_POST[login]'),md5('$_POST[senha]'),2,1)";
+        '$_POST[email]','$_POST[login]',md5('$_POST[senha]'),2,1)";*/
+
+    $sql="INSERT INTO `usuarios`
+		(
+	
+			`idOrganizacao`,
+            `idDepartamento`,
+			`nome`,
+			`cpf`,
+			`data_nascimento`,
+			`telefone`,
+			`celular`,
+			`email`,
+			`cep`,
+            `complemento`,
+            `numero`,
+			`status`,
+			`CadastroDataHora`,
+			`CadastroUsuarioId`,
+			
+            `login`,
+            `senha`,
+            `endereco`,
+            `bairro`,
+            `cidade`,
+            `estado`
+       
+		)
+        VALUES
+		(
+			 $_SESSION[idOrganizacao],
+		
+            '".$_POST[idDepartamento]."',
+			'".$_POST[nome]."',
+			'".$_POST[cpf]."',
+			'".$_POST[data_nascimento]."',
+			'".$_POST[telefone]."',
+			'".$_POST[celular]."',
+			'".$_POST[email]."',
+			'".$_POST[cep]."',
+            '".$_POST[complemento]."',
+            '".$_POST[numero]."',
+			1,
+			current_timestamp(),
+			'". $_SESSION[codUsuario]."',
+		
+            '".$_POST[login]."',
+            '".md5($_POST[senha])."',
+            '".$_POST[endereco]."',
+            '".$_POST[bairro]."',
+            '".$_POST[cidade]."',
+            '".$_POST[uf]."'
+        );
+";
 
     mysql_query($sql, $conexao);
     mysql_close($conexao);
@@ -152,14 +205,14 @@ function salvarMenu(){
 
     for($i=0; $i < sizeof($menu); $i++){
 
-        $sql="insert into controle_menu values ('',$lastIdUsr[0],$menu[$i], $_SESSION[idOrganizacao])";
+        $sql="insert into controle_menu (idUsuario, idMenu, idOrganizacao) values ($lastIdUsr[0],$menu[$i], $_SESSION[idOrganizacao])";
         mysql_query($sql,$conexao);
 
     }
 
     for($i=0; $i < sizeof($submenu); $i++){
 
-        $sql="insert into controle_submenu values ('',$lastIdUsr[0],$submenu[$i], $_SESSION[idOrganizacao])";
+        $sql="insert into controle_submenu (idUsuario, idSubMenu, idOrganizacao) values ($lastIdUsr[0],$submenu[$i], $_SESSION[idOrganizacao])";
         mysql_query($sql,$conexao);
 
     }

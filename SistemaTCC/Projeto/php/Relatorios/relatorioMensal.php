@@ -2,9 +2,10 @@
 /**
  * Created by PhpStorm.
  * User: kevin_000
- * Date: 04/06/2016
- * Time: 15:22
+ * Date: 13/06/2016
+ * Time: 00:03
  */
+
 include '../sistemaJP.php';
 $conexao = AbreBancoJP();
 ob_start();
@@ -29,7 +30,7 @@ $sql = "select
           --  cliente c
             
         where
-            v.dataVenda>current_date()-7
+           month(v.dataVenda)= month(current_date())
          and 
             v.idOrganizacao=1
         and
@@ -37,9 +38,7 @@ $sql = "select
         and
             iv.idProduto = p.idProduto
         and 
-            l.idProduto = p.idProduto;
-        -- and
-        -- 	v.idCliente = c.idCliente;";
+            l.idProduto = p.idProduto;";
 
 $sql = mysql_query($sql, $conexao);
 
@@ -53,7 +52,7 @@ $sql = mysql_query($sql, $conexao);
 
 <body>
 <center>
-    <h1>Relat&oacute;rio Semanal</h1>
+    <h1>Relat&oacute;rio Mensal</h1>
     <style type="text/css">
         .tg  {border-collapse:collapse;border-spacing:0;}
         .tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
@@ -90,10 +89,10 @@ $sql = mysql_query($sql, $conexao);
             </tr>
         <?php }?>
     </table>
-    
-    
-    
-    
+
+
+
+
 </center>
 
 
@@ -104,13 +103,15 @@ $sql = mysql_query($sql, $conexao);
     .tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
     .tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
 </style>
-<!--<table class="tg">-->
-<!--    <tr>-->
-<!--        <th class="tg-031e">Lucro Total</th>-->
-<!--        <td class="tg-031e">--><?php //echo $lucroTot ?><!--</td>-->
-<!--    </tr>-->
-<!---->
-<!--</table>-->
+<table class="tg">
+    <tr>
+        <th class="tg-031e">Lucro Total</th>
+        <td class="tg-031e"><?php echo $lucroTot ?></td>
+    </tr>
+    <!--    <tr>-->
+    <!--        -->
+    <!--    </tr>-->
+</table>
 </center>
 </body>
 </html>

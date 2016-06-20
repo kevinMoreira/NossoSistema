@@ -18,7 +18,7 @@ if(isset($_POST['nome']))
 if(isset($_POST['nome']))
     $objUsuarioEnt->setCpf($_POST['cpf']);
 
-if(isset($_POST['dataNasc']))
+if(isset($_POST['data_nascimento']))
     $objUsuarioEnt->setDataNasc($_POST['data_nascimento']);
 
 if(isset($_POST['telefone']))
@@ -61,7 +61,19 @@ if(isset($_POST['status']))
 if(isset($_POST['codigo']))
     $objUsuarioEnt->setIdUsuario($_POST['codigo']);
 
+//cadastro de  novos usuarios
 
+if(isset($_POST['txtNome']))
+    $objUsuarioEnt->setNome($_POST['txtNome']);
+
+if(isset($_POST['txtEmail']))
+    $objUsuarioEnt->setEmail($_POST['txtEmail']);
+
+if(isset($_POST['txtTelefone']))
+    $objUsuarioEnt->setTelefone($_POST['txtTelefone']);
+
+if(isset($_POST['txtSenha']))
+    $objUsuarioEnt->setIdUsuario($_POST['txtSenha']);
 
 
 if (isset($_POST['action'])){
@@ -74,7 +86,14 @@ if (isset($_POST['action'])){
             break;
 
         case 'salvarUsuario':
+
             $teste = $objUsuarioNeg->Salvar($objUsuarioEnt);
+            
+            echo $teste;
+            break;
+        
+       case 'salvarMenu':
+            $teste = $objUsuarioNeg->SalvarMenu($_POST['menu'],$_POST['subMenu']);
             echo $teste;
             break;
 
@@ -85,22 +104,31 @@ if (isset($_POST['action'])){
 
 
         case 'editarUsuario':
-            $teste= $objUsuarioNeg->Atualizar($_POST['codigo'],$_POST['nome'],$_POST['cpf'],$_POST['data_nascimento']
-            ,$_POST['telefone'],$_POST['celular'], $_POST['email'], $_POST['cep'], $_POST['endereco'], 
-            $_POST['numero'],$_POST['complemento'],$_POST['bairro'],$_POST['cidade'],$_POST['uf'],$_POST['login']
-            ,$_POST['senha'],$_POST['status'],$_POST['codigo']
+            $teste= $objUsuarioNeg->Atualizar(
+
+                $_POST['nome'],
+                $_POST['cpf'],
+                $_POST['data_nascimento'],
+                $_POST['telefone'],
+                $_POST['celular'],
+                $_POST['email'],
+                $_POST['cep'],
+                $_POST['endereco'],
+                $_POST['numero'],
+                $_POST['complemento'],
+                $_POST['bairro'],
+                $_POST['cidade'],
+                $_POST['uf'],
+                $_POST['login'],
+                $_POST['senha'],
+                $_POST['status']
+
             );
             echo $teste;
             break;
 
-//        case 'excluir':
-//           $teste=$objUsuarioNeg->Excluir($objUsuarioEnt);
-//            echo $teste;
-//            break;
-
         case 'excluir':
             $teste=$objUsuarioNeg->Excluir($_POST['id_usuario']);
-//            $teste=$objUsuarioNeg->Excluir($_POST['login']);
             echo $teste;
             break;
 
@@ -110,14 +138,27 @@ if (isset($_POST['action'])){
             echo $json;
             break;
 
+        case 'Login':
+            $teste = $objUsuarioNeg->Login($_POST['login'],$_POST['senha']);
+            echo $teste;
+        break;
 //        case 'subMenu':
 //            $objUsuarioNeg->subMenu() ;
 //            break;
-//
+
+    
+    
 //        case 'salvarMenu':
-//            salvarMenu();
+//            $objUsuarioNeg->salvarMenu($_SESSION['idOrganizacao'],);
 //            break;
 
+
+        case 'Gravar':
+
+            $teste = $objUsuarioNeg->Gravar($objUsuarioEnt,$_POST["txtEstabelecimento"]);
+//            print "<script> alert( $_POST[txtEstabelecimento]); </script>";
+            echo $teste;
+            break;
 
     }
 }
@@ -151,35 +192,71 @@ class UsuarioNeg
 //    }
 
 
-    public function Atualizar($codigo,$nome,$cpf,$data_nascimento
+    public function Atualizar($nome,$cpf,$data_nascimento
             ,$telefone,$celular, $email, $cep, $endereco, 
             $numero,$complemento,$bairro,$cidade,$uf,$login
-            ,$senha,$status,$cod){
+            ,$senha,$status){
         $UsuarioDao = new UsuarioDao();
-        return $UsuarioDao->Atualizar($codigo,$nome,$cpf,$data_nascimento
-            ,$telefone,$celular, $email, $cep, $endereco,
-            $numero,$complemento,$bairro,$cidade,$uf,$login
-            ,$senha,$status,$cod);
+        return $UsuarioDao->Atualizar(
+            $nome,
+            $cpf,
+            $data_nascimento,
+            $telefone,
+            $celular,
+            $email,
+            $cep,
+            $endereco,
+            $numero,
+            $complemento,
+            $bairro,
+            $cidade,
+            $uf,
+            $login,
+            $senha,
+            $status);
     }
 
-//    public function Excluir(Usuario $objUsuario){
+    public function Excluir($id){
+        $UsuarioDao = new UsuarioDao();
+        return $UsuarioDao->Excluir($id);
+    }
+
+//    public function Excluir($valor){
 //        $UsuarioDao = new UsuarioDao();
-//        return $UsuarioDao->Excluir($objUsuario);
+//        return $UsuarioDao->Excluir($valor);
 //    }
 
-    public function Excluir($valor){
-        $UsuarioDao = new UsuarioDao();
-        return $UsuarioDao->Excluir($valor);
-    }
 
+//    public function SalvarMenu(){
+//        $UsuarioDao = new UsuarioDao();
+//        return $UsuarioDao->SalvarMenu();
+//
+//    }
+//
 //    public function subMenu(){
 //        $UsuarioDao = new UsuarioDao();
 //        $UsuarioDao->subMenu();
 //    }
 
-//    public function subMenu(){
-//        $UsuarioDao = new UsuarioDao();
-//        $UsuarioDao->subMenu();
-//    }
+
+
+    public function Login($login,$senha){
+        $UsuarioDao = new UsuarioDao();
+        return $UsuarioDao->Login($login,$senha);
+
+    }
+
+
+    public function SalvarMenu($menu,$subMenu){
+        $UsuarioDao = new UsuarioDao();
+        return  $UsuarioDao->SalvarMenu($menu,$subMenu);
+    }
+//
+//
+    public function Gravar(Usuario $objUsuario, $estabelecimento){
+        $UsuarioDao = new UsuarioDao();
+        return $UsuarioDao->Gravar($objUsuario, $estabelecimento);
+
+    }
 
 }

@@ -11,11 +11,11 @@ window.onload = function () {
 
 function carregaDep() {
     var combo = document.getElementById('departamento');
-    var ajax = new Ajax('POST', 'php/cadastro-de-usuarios.php', false);
+    var ajax = new Ajax('POST', './php/Neg/UsuarioNeg.php', false);
     var p = 'action=carregaDep';
 
     ajax.Request(p);
-
+    alert(ajax.getResponseText());
     var json = JSON.parse(ajax.getResponseText());
 
     //alert(ajax.getResponseText());return;
@@ -44,8 +44,8 @@ function MudaStatus() {
 
 function Menu() {
 
-    var ajax = new Ajax('POST', 'php/cadastro-de-usuarios.php', false);
-
+   var ajax = new Ajax('POST', 'php/cadastro-de-usuarios.php', false);
+    // var ajax = new Ajax('POST', 'php/Neg/UsuarioNeg.php', false);
     var p = 'action=menu';
 
     ajax.Request(p);
@@ -126,13 +126,13 @@ function Pesquisar() {
     var pesq;
     if (pesq = prompt("Buscar usuário pelo nome, telefone ou cpf.")) {
 
-        var ajax = new Ajax('POST', 'php/cadastro-de-usuarios.php', false);
+        var ajax = new Ajax('POST', './php/Neg/UsuarioNeg.php', false);
 
         var p = 'action=pesquisarUsuario';
         p += '&pesq=' + pesq;
 
         ajax.Request(p);
-
+        alert(ajax.getResponseText());
         if (ajax.getResponseText() == 0) {
             alert("Inexistente!");
             return;
@@ -141,30 +141,32 @@ function Pesquisar() {
         var json = JSON.parse(ajax.getResponseText());
         var combo = document.getElementById('departamento');
 
-        document.getElementById('nome').value = json[0].nome;
-        document.getElementById('cpf').value = json[0].cpf;
-        document.getElementById('data_nascimento').value = json[0].data_nascimento;
-        document.getElementById('telefone').value = json[0].telefone;
-        document.getElementById('celular').value = json[0].celular;
-        document.getElementById('email').value = json[0].email;
-        document.getElementById('cep').value = json[0].cep;
-        document.getElementById('endereco').value = json[0].endereco;
-        document.getElementById('numero').value = json[0].numero;
-        document.getElementById('complemento').value = json[0].complemento;
-        document.getElementById('bairro').value = json[0].bairro;
-        document.getElementById('cidade').value = json[0].cidade;
-        document.getElementById('uf').value = json[0].uf;
-        document.getElementById('login').value = json[0].login;
-        document.getElementById('senha').value = json[0].senha;
-        document.getElementById('status').value = json[0].status;
-        document.getElementById('codigo').value = json[0].id_usuario;
-        combo.options[0] = new Option(json[0].nomeDepartamento, json[0].idDepartamento);
+        document.getElementById('nome').value = json.nome;
+        document.getElementById('cpf').value = json.cpf;
+        document.getElementById('data_nascimento').value = json.data_nascimento;
+        document.getElementById('telefone').value = json.telefone;
+        document.getElementById('celular').value = json.celular;
+        document.getElementById('email').value = json.email;
+        document.getElementById('cep').value = json.cep;
+        document.getElementById('endereco').value = json.endereco;
+        document.getElementById('numero').value = json.numero;
+        document.getElementById('complemento').value = json.complemento;
+        document.getElementById('bairro').value = json.bairro;
+        document.getElementById('cidade').value = json.cidade;
+        document.getElementById('uf').value = json.uf;
+        document.getElementById('login').value = json.login;
+        document.getElementById('senha').value = json.senha;
+        document.getElementById('status').value = json.status;
+        document.getElementById('codigo').value = json.idUsuario;
+         document.getElementById('departamento').value = json.departamento;
+        // combo.options[0] = new Option(json[0].nomeDepartamento, json[0].idDepartamento);
+        //combo.options[0] = new Option(json.nomeDepartamento, json.idDepartamento);
 
         var q = 'action=pesquisarMenuUsuario';
-        q += '&id_usuario=' + json[0].id_usuario;
+        q += '&id_usuario=' + json.id_usuario;
 
         var r = 'action=pesquisarSubMenuUsuario';
-        r += '&id_usuario=' + json[0].id_usuario;
+        r += '&id_usuario=' + json.id_usuario;
 
         ajax.Request(q);
 
@@ -173,8 +175,8 @@ function Pesquisar() {
         document.getElementById('permissoes').setAttribute('style', 'display:block');
 
         var chk = document.getElementsByName('item');
-        //var x='action=menu';
-        //ajax.Request(x);
+        var x='action=menu';
+        ajax.Request(x);
         var id_menu, id_submenu, nome;
 
         for (var i = 0; i < json.length; i++) {
@@ -185,7 +187,7 @@ function Pesquisar() {
                 if (id_menu == chk[j].id) {
                     chk[j].checked = true;
 
-                    //json2 = JSON.parse(ajax.getResponseText());
+                    json2 = JSON.parse(ajax.getResponseText());
                 }
             }
         }
@@ -209,15 +211,13 @@ function Excluir() {
 
     if (confirm("Deseja excluir usuário?")) {
 
+        // var id_usuario = document.getElementById('codigo').value;
         var id_usuario = document.getElementById('codigo').value;
-
-        var ajax = new Ajax('POST', 'php/cadastro-de-usuarios.php', false);
+        var ajax = new Ajax('POST', './php/Neg/UsuarioNeg.php', false);
 
         var p = 'action=excluir';
         p += '&id_usuario=' + id_usuario;
-
         ajax.Request(p);
-
         alert("Excluído com sucesso!");
 
         Cancelar();
@@ -270,7 +270,7 @@ function Desabilitar(valor) {
     if (valor == true) {
         document.getElementById('titulo').setAttribute('style', 'display:none');
         document.getElementById('permissoes').setAttribute('style', 'display:none');
-        //$JQuery("#permissoes").slideUp(2000);
+        $JQuery("#permissoes").slideUp(2000);
     } else {
         document.getElementById('titulo').setAttribute('style', 'display:block');
     }
@@ -326,8 +326,8 @@ function Cancelar() {
 
 function Salvar() {
 
-    var ajax = new Ajax('POST', 'php/cadastro-de-usuarios.php', false);
-
+    //var ajax = new Ajax('POST', './php/Neg/UsuarioNeg.php', false);
+    var ajax = new Ajax('POST', './php/cadastro-de-usuarios.php', false);
     var nome = document.getElementById('nome').value;
     var departamento = document.getElementById('departamento').value;
     var cpf = document.getElementById('cpf').value;
@@ -350,28 +350,28 @@ function Salvar() {
 
     var menu = '';
     var subMenu = '';
-
+    
     for (var i = 0; i < chk.length; i++) {
-
+    
         if (chk[i].checked == true) {
-
-            if (menu === '')
+    
+            if (menu == '')
                 menu = chk[i].id + ",";
             else
                 menu += chk[i].id + ",";
         }
     }
-
+    
     for (var i = 0; i < chk2.length; i++) {
-
+    
         if (chk2[i].checked == true) {
-
-            if (subMenu === '')
+    
+            if (subMenu == '')
                 subMenu = chk2[i].id + ",";
             else
                 subMenu += chk2[i].id + ",";
         }
-
+    
     }
 
 
@@ -411,8 +411,8 @@ function Update() {
 
     if (confirm("Deseja atualizar?")) {
 
-        var ajax = new Ajax('POST', 'php/cadastro-de-usuarios.php', false);
-
+        //var ajax = new Ajax('POST', './php/Neg/UsuarioNeg.php', false);
+        var ajax = new Ajax('POST', './php/cadastro-de-usuarios.php', false);
         var nome = document.getElementById('nome').value;
         var cpf = document.getElementById('cpf').value;
         var data_nascimento = document.getElementById('data_nascimento').value;
@@ -482,13 +482,11 @@ function Update() {
         p += '&id_usuario=' + id_usuario;
         p += '&idDepartamento=' + departamento;
 
-        q += '&menu=' + menu;//Envia vetor com as opções de permissão do usuário
-        q += '&subMenu=' + subMenu;//Envia vetor com as opções de permissão do usuário
-        q += '&id_usuario=' + id_usuario;
-
+         q += '&menu=' + menu;//Envia vetor com as opções de permissão do usuário
+         q += '&subMenu=' + subMenu;//Envia vetor com as opções de permissão do usuário
+         q += '&id_usuario=' + id_usuario;
         ajax.Request(p);
         ajax.Request(q);
-
         Cancelar();
 
         window.location = 'cadastro-de-usuarios.html';

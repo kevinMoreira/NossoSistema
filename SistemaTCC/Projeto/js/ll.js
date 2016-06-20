@@ -51,7 +51,9 @@ $(document).ready(function () {
     });
 
     $JQuery('#finalizar').click(function () {
+
         realizarVenda();
+
     });
 
     $JQuery('#button_cancelar').click(function () {
@@ -118,6 +120,7 @@ function realizarVenda() {
             else
                 subtotal += ',' + $JQuery(this).text();
         });
+       ;
     });
 
     if (valor !== null && idProduto !== null) {
@@ -125,8 +128,9 @@ function realizarVenda() {
         if (confirm("Efetuar venda?")) {
             var ajax = new Ajax('POST', 'php/caixa.php', false);//funfou!!!!
             var p = 'action=criaVenda';
+            alert(p);
             ajax.Request(p);//cria venda
-
+            alert(ajax.getResponseText());
             var ajax2 = new Ajax('POST', 'php/caixa.php', false);
             var q = 'action=baixaEstoque';
             q += '&idProduto=' + idProduto;
@@ -135,7 +139,8 @@ function realizarVenda() {
             q += '&subtotal=' + subtotal;
 
             ajax2.Request(q);//cadastra item venda
-
+            alert(q);
+            alert(ajax2.getResponseText());
             //alert(ajax2.getResponseText());
 
             limpa();//chama a função para limpar os dados contidos nas divs e inputs

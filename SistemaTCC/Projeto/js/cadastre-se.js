@@ -53,8 +53,10 @@ function Cadastrar(){
     }
 
 
-    var ajax = new Ajax('POST', 'php/cadastre-se.php', false);
-
+    // var ajax = new Ajax('POST', 'php/cadastre-se.php', false);
+    
+    var ajax = new Ajax('POST', 'php/Neg/UsuarioNeg.php', false);
+    
     var txtNome = document.getElementById('txtNome').value;
     var txtEmail = document.getElementById('txtEmail').value;
     var txtEstabelecimento = document.getElementById('txtEstabelecimento').value;
@@ -71,9 +73,10 @@ function Cadastrar(){
     p+='&txtSenha=' + txtSenha;
 
     if(confirm("Deseja salvar?")){
-
+        alert(p);
         ajax.Request(p);
 
+        alert(ajax.getResponseText());
         //var json = JSON.parse(ajax.getResponseText());
 
        if (ajax.getResponseText() == '0') {

@@ -36,7 +36,7 @@ function Pesquisar(){
         p+='&pesq=' + pesq;
 
         ajax.Request(p);
-       
+
         if(ajax.getResponseText()==0){
             alert("Inexistente!");
             return;
@@ -45,30 +45,27 @@ function Pesquisar(){
         var json = JSON.parse(ajax.getResponseText());
         var combo = document.getElementById('categoria');
         
-        document.getElementById('nome').value=json[0].nome;
-        document.getElementById('valorVenda').value=json[0].valorVenda;
-        document.getElementById('codigo').value=json[0].id_produto;
-        combo.options[0] = new Option(json[0].nomeCategoria, json[0].idCategoria);
+        document.getElementById('nome').value=json.nome;
+        document.getElementById('valorVenda').value=json.valor;
+        document.getElementById('codigo').value=json.produtoId;
+        document.getElementById('codigoBarras').value=json.codigoBarras;
+        combo.value = json.categoriaId;
+        //combo.options[0] = new Option(json.categoriaId, json.categoriaId);
     }
 }
 
 function Excluir(){
 
     if(confirm("Deseja excluir produto?")){
-
-        var id_produto = document.getElementById('codigo').value;
-
+        var produtoId = document.getElementById('codigo').value;
         var ajax = new Ajax('POST', './php/Neg/ProdutoNeg.php', false);
 
         var p='action=excluir';
-        p+='&id_produto=' + id_produto;
+        p+='&produtoId=' + produtoId;
 
         ajax.Request(p);
-
         alert("Excluído com sucesso!");
-
         Cancelar();
-
     }else{
         alert("Ufa... Foi por pouco!");
     }
@@ -142,17 +139,20 @@ function Salvar(){
 
     var ajax = new Ajax('POST', './php/Neg/ProdutoNeg.php', false);
 
-    var codigo = document.getElementById('codigo').value;
+    var produtoId = document.getElementById('codigo').value;
+    var codigoBarras = document.getElementById('codigoBarras').value;
     var nome = document.getElementById('nome').value;
-    var valorVenda = document.getElementById('valorVenda').value;
-    var categoria = document.getElementById('categoria').value;
-    
-    var p='action=salvarProduto'; 
 
-    p+='&codigo=' + codigo;
+    var valorVenda = document.getElementById('valorVenda').value;
+    var categoriaId = document.getElementById('categoria').value;
+    
+    var p='action=salvarProduto';
+
+    p+='&produtoId=' + produtoId;
+    p+='&codigoBarras=' + codigoBarras;
     p+='&nome=' + nome;
     p+='&valorVenda=' + valorVenda;
-    p+='&categoria=' + categoria;
+    p+='&categoriaId=' + categoriaId;
 
     if(confirm("Deseja salvar?")){
         ajax.Request(p);
@@ -166,16 +166,18 @@ function Update(){
     if(confirm("Deseja atualizar?")){
 
         var ajax = new Ajax('POST', './php/Neg/ProdutoNeg.php', false);
-        var codigo = document.getElementById('codigo').value;
+        var produtoId = document.getElementById('codigo').value;
+        var codigoBarras = document.getElementById('codigoBarras').value;
         var nome = document.getElementById('nome').value;
         var valorVenda = document.getElementById('valorVenda').value;
-        var categoria = document.getElementById('categoria').value;
+        var categoriaId = document.getElementById('categoria').value;
         var p='action=editarProduto'; 
 
-        p+='&id_produto=' + codigo;
+        p+='&produtoId=' + produtoId;
+        p+='&codigoBarras=' + codigoBarras;
         p+='&nome=' + nome;
         p+='&valorVenda=' + valorVenda;
-        p+='&categoria=' + categoria;
+        p+='&categoriaId=' + categoriaId;
 
         ajax.Request(p);
         Cancelar();

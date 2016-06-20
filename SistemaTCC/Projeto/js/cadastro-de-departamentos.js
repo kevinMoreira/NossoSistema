@@ -17,9 +17,7 @@ function carregaDep() {
     ajax.Request(p);
 
     var json = JSON.parse(ajax.getResponseText());
-
-    //alert(ajax.getResponseText());return;
-
+    
     combo.options[0] = new Option("SELECIONE");
 
     for (var i = 0; i < json.length; i++) {

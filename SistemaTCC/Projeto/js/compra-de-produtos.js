@@ -20,7 +20,7 @@ function pesquisarProduto(){//carrega produto e categoria pelo código
     ajax.Request(p);
 
     var json = JSON.parse(ajax.getResponseText());
-    alert(ajax.getResponseText());
+    // alert(ajax.getResponseText());
     comboProd.options[0] = new Option(json[0].nome, json[0].idProduto);
     comboCat.options[0] = new Option(json[0].nomeCategoria, json[0].idCategoria);
 
@@ -73,7 +73,7 @@ function Pesquisar(){
 
         var fornecedor = document.getElementById('fornecedor');
         fornecedor.options[0] = new Option (json[0].nome_fornecedor, json[0].id_fornecedor);
-        
+
         document.getElementById('qtde').value=json[0].qtde;
         document.getElementById('valorCompra').value=json[0].valorCompra;
         document.getElementById('validade').value=json[0].validade;
@@ -181,20 +181,20 @@ function Salvar(){
     var qtde = document.getElementById('qtde').value;
     var valorCompra = document.getElementById('valorCompra').value;
     var validade = document.getElementById('validade').value;
-    var p='action=salvarCompraProduto'; 
+    var p='action=salvarCompraProduto';
 
     p+='&id_produto=' + id_produto;
     p+='&id_fornecedor=' + id_fornecedor;
     p+='&qtde=' + qtde;
     p+='&valorCompra=' + valorCompra;
     p+='&validade=' + validade;
-    alert(p);
+    // alert(p);
     if(confirm("Deseja salvar?")){
-        
+        // alert(p);
         ajax.Request(p);
-        
-        alert(ajax.getResponseText());
-        
+
+        // alert(ajax.getResponseText());
+
         Cancelar();
         alert("Gravado com sucesso!");
     }
@@ -208,22 +208,22 @@ function Update(){
     var valorCompra = document.getElementById('valorCompra').value;
     var validade = document.getElementById('validade').value;
     var idLote = document.getElementById('codigoLote').value;
-    var p='action=editarCompraProduto'; 
+    var p='action=editarCompraProduto';
 
     p+='&id_fornecedor=' + id_fornecedor;
     p+='&qtde=' + qtde;
     p+='&valorCompra=' + valorCompra;
     p+='&validade=' + validade;
     p+='&idLote=' + idLote;
-  
+
     if(confirm("Deseja atualizar?")){
         ajax.Request(p);
-        alert(p);
+        // alert(p);
 
-        alert(ajax.getResponseText());
+        // alert(ajax.getResponseText());
         Cancelar();
         alert("Atualizado com sucesso!");
-    }        
+    }
 }
 
 function carregarComboBoxCat(){

@@ -46,7 +46,6 @@ function Pesquisar(){
 
         var json = JSON.parse(v);
 
-        alert(ajax.getResponseText());
         if (ajax.getResponseText() == 0) {
             alert("Inexistente!");
             return;
@@ -151,10 +150,7 @@ function Salvar(){
     p+='&nome=' + nome;
 
     if(confirm("Deseja salvar?")){
-        alert(p);
         ajax.Request(p);
-        alert(ajax.getResponseText());
-
         Cancelar();
         alert("Gravado com sucesso!");
     }
@@ -173,11 +169,8 @@ function Update(){
 
         p+='&idCategoria=' + idCategoria;
         p+='&nome=' + nome;
-alert(p);
-
 
         ajax.Request(p);
-        alert(ajax.getResponseText());
         Cancelar();
         alert("Atualizado com sucesso!");
     }

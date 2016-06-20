@@ -4,15 +4,20 @@ $(document).ready(function () {
     VerificaSessao();
     getDadosUsuario();
     MontaMenu();
+
     $JQuery("#pesq").focus();
-    busca();
+     busca();
     $JQuery("#pesq").keyup(function () {//Jquery efeito da tecla ao subir
-        busca();
+     busca();
     });
 });
 
 function busca() {
-    javascript:window.location.href=('php/Relatorios/relatorioDiario.php');
+      // alert("clicou");
+     // javascript:window.open('..php/Relatorios/relatorioDiario.php');
+    window.open('./php/Relatorios/relatorioDiario.php');
+     javascript:window.location.href=('./principal.html');
+
     var pesquisa = $JQuery("#pesq").val();//pega o valor contido no input pesq que foi selecionado acima
 
     var pesq = 'action=relatorioDiario';

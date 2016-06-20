@@ -44,32 +44,30 @@ function Pesquisar(){
     var pesq;
     if(pesq=prompt("Buscar cliente pelo nome, telefone ou cpf.")){
 
-        var ajax = new Ajax('POST', 'php/cadastro-de-clientes.php', false);
+        var ajax = new Ajax('POST', 'php/Neg/ClienteNeg.php', false);
         var p='action=pesquisarCliente';
         p+='&pesq=' + pesq;
-
         ajax.Request(p);
-
         if(ajax.getResponseText()==0){
             alert("Inexistente!");
             return;
         }
         var json = JSON.parse(ajax.getResponseText());
-        document.getElementById('nome').value=json[0].nome;
-        document.getElementById('cpf').value=json[0].cpf;
-        document.getElementById('data_nascimento').value=json[0].data_nascimento;
-        document.getElementById('telefone').value=json[0].telefone;
-        document.getElementById('celular').value=json[0].celular;
-        document.getElementById('email').value=json[0].email;
-        document.getElementById('cep').value=json[0].cep;
-        document.getElementById('endereco').value=json[0].endereco;
-        document.getElementById('numero').value=json[0].numero;
-        document.getElementById('complemento').value=json[0].complemento;
-        document.getElementById('bairro').value=json[0].bairro;
-        document.getElementById('cidade').value=json[0].cidade;
-        document.getElementById('uf').value=json[0].uf;
-        document.getElementById('status').value=json[0].status_;
-        document.getElementById('codigo').value=json[0].id_cliente;       
+        document.getElementById('nome').value = json.nome;
+        document.getElementById('cpf').value = json.cpf;
+        document.getElementById('data_nascimento').value = json.data_nascimento;
+        document.getElementById('telefone').value = json.telefone;
+        document.getElementById('celular').value = json.celular;
+        document.getElementById('email').value = json.email;
+        document.getElementById('cep').value = json.cep;
+        document.getElementById('endereco').value = json.endereco;
+        document.getElementById('numero').value = json.numero;
+        document.getElementById('complemento').value = json.complemento;
+        document.getElementById('bairro').value = json.bairro;
+        document.getElementById('cidade').value = json.cidade;
+        document.getElementById('uf').value = json.uf;
+        document.getElementById('status').value = json.status_;
+        document.getElementById('codigo').value = json.idCliente;
     }
        
 }
@@ -79,14 +77,11 @@ function Excluir(){
     if(confirm("Deseja excluir usuário?")){
 
         var id_cliente = document.getElementById('codigo').value;
-
-        var ajax = new Ajax('POST', 'php/cadastro-de-clientes.php', false);
+        var ajax = new Ajax('POST', './php/Neg/ClienteNeg.php', false);
 
         var p='action=excluir';
         p+='&id_cliente=' + id_cliente;
-
         ajax.Request(p);
-
         alert("Excluído com sucesso!");
 
         Cancelar();
@@ -181,7 +176,8 @@ function Cancelar(){
 
 function Salvar(){
 
-	var ajax = new Ajax('POST', 'php/cadastro-de-clientes.php', false);
+	// var ajax = new Ajax('POST', 'php/cadastro-de-clientes.php', false);
+    var ajax = new Ajax('POST', 'php/Neg/ClienteNeg.php', false);
 
     var nome = document.getElementById('nome').value;
     var cpf = document.getElementById('cpf').value;
@@ -217,6 +213,7 @@ function Salvar(){
     p+='&status=' + status;
 
     if(confirm("Deseja salvar?")){
+
     	ajax.Request(p);
     	Cancelar();
     	alert("Gravado com sucesso!");
@@ -227,7 +224,7 @@ function Update(){
 
     if(confirm("Deseja atualizar?")){
 
-        var ajax = new Ajax('POST', 'php/cadastro-de-clientes.php', false);
+        var ajax = new Ajax('POST', 'php/Neg/ClienteNeg.php', false);
 
         var nome = document.getElementById('nome').value;
         var cpf = document.getElementById('cpf').value;

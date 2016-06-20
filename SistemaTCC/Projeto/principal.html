@@ -5,14 +5,23 @@
         <title>Principal | Sistema JP</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width">
+
+
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
         <!-- <meta http-equiv="Refresh" content="05; url=principal.html" /> -->
-        <link rel="stylesheet" href="css/sistemaJP.css" />
+
         <script type="text/javascript" src="js/json.js"></script>
         <script type="text/javascript" src="js/ajax.js"></script>
         <script type="text/javascript" src="js/sistemaJP.js"></script>
         <script type="text/javascript" src="js/principal.js"></script>
         <script type="text/javascript" src="js/jquery.js"></script>
         <script type="text/javascript" src="js/Chart/Chart.min.js"></script>
+        <link href="css/bootstrap.css" rel="stylesheet">
+        <link rel="stylesheet" href="css/sistemaJP.css" />
+        <link rel="stylesheet" href="css/demo.css">
         <script type="text/javascript" src="js/legend.js"></script>
         <script type="text/javascript">
             var $JQuery = jQuery.noConflict()
@@ -31,5 +40,70 @@
             </div>
             <canvas id="myChart" width="1000" height="400"></canvas>
         </div>
+        <a href="#" id="ateste" class="btn btn-success btn-block" data-toggle="modal" data-target="#squarespaceModal" >Orçar Pedido<i class="fa fa-angle-right">
+
+        <div class="modal fade alert" id="squarespaceModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">x</span><span class="sr-only">Close</span></button>
+                        <h3 class="modal-title" id="lineModalLabel">Dados para contato</h3>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+
+                                <input type="email" class="form-control" id="txtEmail" placeholder="Digite seu email">
+                            </div>
+
+                            <div class="form-group">
+
+                                <input type="text" class="form-control" id="txtTelefone" placeholder="Digite seu telefone">
+                            </div>
+                            <div class="form-group">
+
+                                <!-- <input type="text" class="form-control" id="txtObs" placeholder="Observação"> -->
+                                <textarea class="form-control" id="txtObs" name="observacao" placeholder="Observação" rows="3"></textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary center-block">Enviar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <style>
+            .center {
+                margin-top:50px;
+            }
+
+            .modal-header {
+                padding-bottom: 5px;
+            }
+
+            .modal-footer {
+                padding: 0;
+            }
+
+            .modal-footer .btn-group button {
+                height:40px;
+                border-top-left-radius : 0;
+                border-top-right-radius : 0;
+                border: none;
+            }
+
+            .modal-footer .btn-group:last-child > button {
+                border-right: 0;
+            }
+        </style>
     </body>
 </html>
+<script type="text/javascript">
+
+    $(document).ready(function(){
+        $("#ateste").click();
+    });
+
+
+    </script>

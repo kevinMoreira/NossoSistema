@@ -10,31 +10,33 @@ window.onload = function() {
 function Login() {
     spin();
     var login = document.getElementById('login');
-    if (login.value === '') {
+    if (login.value == '') {
           $JQuery("#foo").hide();
-        //alert("Preencha o campo login.");
+        alert("Preencha o campo login.");
         document.getElementById('erro_email').setAttribute('style','display:block');
         login.focus();
         return;
     }
 
     var senha = document.getElementById('senha');
-    if (senha.value === '') {
+    if (senha.value == '') {
           $JQuery("#foo").hide();
-       // alert("Preencha o campo senha.");
+       alert("Preencha o campo senha.");
        document.getElementById('erro_senha').setAttribute('style','display:block');
        senha.focus();
        return;
    }
 
-   var ajax = new Ajax('POST', 'php/index.php', true);
-
+   // var ajax = new Ajax('POST', 'php/index.php', true);
+    var ajax = new Ajax('POST', 'php/Neg/UsuarioNeg.php', true);
    ajax.ajax.onreadystatechange = function() {
 
+      
     if (!ajax.isStateOK())
         return;
 
-    if (ajax.getResponseText() === '0') {
+    if (ajax.getResponseText() == '0') {
+
         $JQuery("#foo").hide();
         alert("Usuário e/ou senha incorretos.");
         login.value = "";
@@ -43,7 +45,7 @@ function Login() {
         return;
     }
 
-    if (ajax.getResponseText() === '1') {
+    if (ajax.getResponseText() == '1') {
         window.location = 'principal.html';
     }
 };
@@ -52,6 +54,8 @@ var p = 'action=Login';
 p += '&login=' + document.getElementById('login').value;
 p += '&senha=' + document.getElementById('senha').value;
 ajax.Request(p);
+
+
 }
 
 function Cadastre_se(){

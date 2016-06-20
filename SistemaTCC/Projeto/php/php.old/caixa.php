@@ -115,9 +115,25 @@ function baixaEstoque() {//dá baixa no estoque seguindo a regra de negócio
             // Início da baixa no estoque
             //=========================================================================================
             if($cancelado != 1){
-			    $qtdeTotalProd = "select sum(qtde) from loteprodutos 
-			    where idProduto = '$idProduto[$i]' and status=1 and idOrganizacao=". $_SESSION['idOrganizacao'];
+//			    $qtdeTotalProd = "select sum(qtde) from loteprodutos
+//			    where idProduto = '$idProduto[$i]' and status=1 and idOrganizacao=". $_SESSION['idOrganizacao'];
 
+				$qtdeTotalProd ="select sum(lpb.quantidade) as total from loteprodutosbaixa lpb, loteprodutos lp
+				where 
+				
+				lp.idProduto = ".$idProduto[$i]."
+				
+				and 
+				lp.status=1 
+				 and 
+				
+				 lp.idOrganizacao=$_SESSION[idOrganizacao]
+				 and
+				
+				lpb.LoteProdutosId = lp.idLote
+				
+				
+				;";
 			    $qtdeTotalProd = mysql_query($qtdeTotalProd, $conexao);
 			    $qtdeTotalProd = mysql_fetch_row($qtdeTotalProd);
 
@@ -125,7 +141,7 @@ function baixaEstoque() {//dá baixa no estoque seguindo a regra de negócio
 
                 //Pega produto com o prazo de validade mais próximo do vencimento orderby desc
 			    $qtdeBanco = "select qtde, validade,idlote from loteprodutos
-			    where idProduto = '$idProduto[$i]' and status=1 and idOrganizacao=". $_SESSION['idOrganizacao'] ." order by validade desc";
+			    where idProduto = '$idProduto[$i]' and status=1 and idOrganizacao=". $_SESSION['idOrganizacao'] ." order by validade desc limit 1";
 			 
 			    $qtdeBanco = mysql_query($qtdeBanco, $conexao);
             
@@ -142,31 +158,37 @@ function baixaEstoque() {//dá baixa no estoque seguindo a regra de negócio
                 //A flag serve para verificar se entrou no if que determina o desconto na qtde apartir de um calculo feito,
                 //para que no proximo item de data de vencimento mais curta, tenha a qtde zerada 
                 $flag=0;
-            
-			    while($row = mysql_fetch_row($qtdeBanco)){
-				    $qtdeRestante = $qtdeRestante - $row[0];
-                
-				    if($qtdeRestante < 0 && $flag != 1){
-					    $validade = $row[1];
-					    $qtdeRestante = $qtdeRestante * (-1);
-                    
-                        if(($row[0] - $qtdeRestante) <= 0){
-                            $updateQtde = "UPDATE loteprodutos set qtde = 0, status = 0 
-				            where (idProduto = '$idProduto[$i]' and idlote='$row[2]') and status = 1 and idOrganizacao=". $_SESSION['idOrganizacao'];
-				            $updateQtde = mysql_query($updateQtde);
-                        }else{
-                            $updateQtde = "UPDATE loteprodutos set qtde = '$row[0]' - '$qtdeRestante'
-					        where (idProduto = '$idProduto[$i]' and idlote = '$row[2]') and status = 1 and idOrganizacao=". $_SESSION['idOrganizacao'];
-                            $updateQtde = mysql_query($updateQtde);
-                        }
-					
-                        $flag=1;
-				    }else if($flag == 1){
-                        $updateQtde = "UPDATE loteprodutos set qtde = 0, status = 0 
-				        where (idProduto = '$idProduto[$i]' and idlote='$row[2]') and status = 1 and idOrganizacao=". $_SESSION['idOrganizacao'];
-				        $updateQtde = mysql_query($updateQtde);
-                    }
-			    }
+
+				while($row = mysql_fetch_row($qtdeBanco)){
+					$qtdeRestante = $qtdeRestante - $row[0];
+
+					if($qtdeRestante < 0 && $flag != 1){
+						$validade = $row[1];
+						$qtdeRestante = $qtdeRestante * (-1);
+
+						if(($row[0] - $qtdeRestante) <= 0){
+							$updateQtde = "
+											UPDATE loteprodutosbaixa set Quantidade = 0 
+											where LoteProdutosId = ".$row[2];
+							$updateQtde = mysql_query($updateQtde);
+						}else{
+							$updateQtde ="						 
+											UPDATE loteprodutosbaixa set Quantidade = '$row[0]' - '$qtdeRestante'
+											where LoteProdutosId = ".$row[2];
+
+
+							$updateQtde = mysql_query($updateQtde);
+						}
+
+						$flag=1;
+					}else if($flag == 1){
+						$updateQtde = "
+											 
+											UPDATE loteprodutosbaixa set Quantidade = 0 
+											where LoteProdutosId = ".$row[2];
+						$updateQtde = mysql_query($updateQtde);
+					}
+				}
             }
 		}
 		mysql_close($conexao);

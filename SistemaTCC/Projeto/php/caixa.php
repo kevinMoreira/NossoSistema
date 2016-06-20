@@ -58,7 +58,7 @@ function busca(){
 // ATUALIZADO 22/08/2014 INCLUSÃO DO CAMPO ORGANIZACAO
 //---------------------------------------------------------------------------------------------------------
 function criaVenda() {
-
+	echo "<script>alert('Entrou no cria venda');</script>";
 	session_start();
 	$cancelado = 0;
 
@@ -68,12 +68,15 @@ function criaVenda() {
 
 	$conexao= AbreBancoJP();
 	$hora = date("H:i:s"); //pega a hora do sistema. Para isso ela precisa estar no fuso horário de são paulo setado no inicio do programa
-	$query = "insert into venda values ('', '$_SESSION[idOrganizacao]', '', curdate(),'$hora', $cancelado)";//3° posição codigo do cliente possivelmente acrescentarei posteriormente
+//	$query = "insert into venda values ('', '$_SESSION[idOrganizacao]', '', curdate(),'$hora', $cancelado)";//3° posição codigo do cliente possivelmente acrescentarei posteriormente
+	$query = "insert into venda(idOrganizacao,idCliente,horaVenda,cancelado) values
+	('$_SESSION[idOrganizacao]',0,CURRENT_TIME ,$cancelado)";
 	mysql_query($query, $conexao);
 	mysql_close($conexao);
 }
 
 function baixaEstoque() {//dá baixa no estoque seguindo a regra de negócio
+//	criaVenda() ;
 
 	session_start();
 	if(isset($_POST['idProduto']) && isset($_POST['qtde']) && isset($_POST['valor'])){
@@ -108,7 +111,10 @@ function baixaEstoque() {//dá baixa no estoque seguindo a regra de negócio
 
 			$valorItem = $qtde[0] * $valor[1];
 
-			$query = "insert into item_venda values ('', $last[0], $idProduto[$i], $qtde[0], $valorItem, $cancelado)"; //insere itens de venda
+
+			//$query = "insert into item_venda values ('', $last[0], $idProduto[$i], $qtde[0], $valorItem, $cancelado)"; //insere itens de venda
+			$query = "insert into item_venda(idVenda,idProduto,qtde,subTotal,cancelado) values ( $last[0], $idProduto[$i], $qtde[0], $valorItem, $cancelado)";
+
 			$query = mysql_query($query, $conexao); //conexao insere itens de venda
 
 			//=========================================================================================
@@ -133,17 +139,18 @@ function baixaEstoque() {//dá baixa no estoque seguindo a regra de negócio
 				lpb.LoteProdutosId = lp.idLote;";
 				$qtdeTotalProd = mysql_query($qtdeTotalProd, $conexao);
 				$qtdeTotalProd = mysql_fetch_row($qtdeTotalProd);
-
+				//quantidade total de produtos qtde, quantidade total do banco - qtd inserida
+				//pelo usuário 
 				$qtdeRestante = $qtdeTotalProd[0] - $qtde[0];
 
 				//Pega produto com o prazo de validade mais próximo do vencimento orderby desc
 //				$qtdeBanco = "select qtde, validade,idlote from loteprodutos
 //			    where idProduto = '$idProduto[$i]' and status=1 and idOrganizacao=". $_SESSION['idOrganizacao'] ." order by validade desc limit 1";
+
 				$qtdeBanco="select 
-								lb.Quantidade, 
+								ifnull(lb.Quantidade,0), 
 								l.validade, 
-								l.idlote 
-								
+								l.idlote							
 								from loteprodutos l,
 								loteprodutosbaixa lb
 								
@@ -151,12 +158,14 @@ function baixaEstoque() {//dá baixa no estoque seguindo a regra de negócio
 								l.idProduto = '$idProduto[$i]'
 								and l.status=1
 								and l.idLote = lb.LoteProdutosId 
+								-- and lb.Quantidade>0
 								and l.idOrganizacao= ". $_SESSION['idOrganizacao'] ."
-								order by l.validade desc limit 1;
+								order by l.validade asc;
 								";
 
 				$qtdeBanco = mysql_query($qtdeBanco, $conexao);
 
+				//tem q fazer a soma no banco e não pegar de um prduto só quando tem 2
 				$validade = 0;
 
 				/*a baixa no estoque é feita da seguinte forma: obtem-se o total da qtde do mesmo produto em todos os lotes
@@ -170,35 +179,158 @@ function baixaEstoque() {//dá baixa no estoque seguindo a regra de negócio
 				//A flag serve para verificar se entrou no if que determina o desconto na qtde apartir de um calculo feito,
 				//para que no proximo item de data de vencimento mais curta, tenha a qtde zerada
 				$flag=0;
-
+//				echo "<script> alert('chegou até aqui');</script>";
+//				echo "<script> alert('$qtdeBanco');</script>";
 				while($row = mysql_fetch_row($qtdeBanco)){
+//					echo "<script>alert('$row[0]');</script>";
 					$qtdeRestante = $qtdeRestante - $row[0];
+//					print "<script> alert('$qtdeRestante');</script>";
+//					print '<script> alert("entrou no while");</script>';
+					if($qtdeRestante<0) {
+
+//						echo  "<scirpt> alert('qted maior que 0');</scirpt>";
+						if ($qtdeRestante < 0 && $flag != 1) {
+//							print '<script> alert("entrou no if");</script>';
+							$validade = $row[1];
+							$qtdeRestante = $qtdeRestante * (-1);
+
+							$teste= $row[0] - $qtdeRestante;
+//							echo '<script> alert("Valor do if".$teste);</script>';
+							if (($row[0] - $qtdeRestante) <= 0) {
+								$updateQtde = "
+							UPDATE 
+								loteprodutos as a 
+								inner join loeprodutosbaixa as b on b.LoteProdutosId = a.idLote
+							set 
+								Quantidade = 0, 
+								FlagStatus = 0,
+								Status = 0
+				            where 
+				            	(idProduto = '$idProduto[$i]' and idlote='$row[2]') 
+				            	and status = 1 
+				            	and idOrganizacao=" . $_SESSION['idOrganizacao'];
+								$updateQtde = mysql_query($updateQtde);
+							} else {
+								$updateQtde = "
+							UPDATE 
+								loteprodutos as a 
+								inner join loteprodutosbaixa as b on b.LoteProdutosId = a.idLote
+							set 
+								Quantidade = '$row[0]' - '$qtdeRestante',
+								b.CadastroDataHora = CURRENT_DATE()
+
+					        where 
+					        	(idProduto = '$idProduto[$i]' and idlote = '$row[2]') 
+					        	and status = 1 
+					        	and idOrganizacao=" . $_SESSION['idOrganizacao'];
+								$updateQtde = mysql_query($updateQtde);
+							}
+
+							$flag = 1;
+						} else if ($flag == 1) {
+							$updateQtde = "
+							UPDATE 
+								loteprodutos as a 
+								inner join LoteProdutosBaixa as b on b.LoteProdutosId = a.idLote
+							set 
+						        Quantidade = 0, 
+						        status = 0,
+						        FlagStatus = 0
+				        where 
+				        
+				        	(idProduto = '$idProduto[$i]' and idlote='$row[2]') 
+				        	and status = 1 
+				        	and idOrganizacao=" . $_SESSION['idOrganizacao'];
+							$updateQtde = mysql_query($updateQtde);
+						}
+					}else{
+
+						$updateQtde = "
+							UPDATE 
+								loteprodutos as a 
+								inner join LoteProdutosBaixa as b on b.LoteProdutosId = a.idLote
+							set 
+						        Quantidade = 0, 
+						        status = 0,
+						        FlagStatus = 0
+				        where 
+				        
+				        	(idProduto = '$idProduto[$i]' and idlote='$row[2]') 
+				        	and status = 1 
+				        	and idOrganizacao=" . $_SESSION['idOrganizacao'];
+						$updateQtde = mysql_query($updateQtde);
+						
+					}
+				}
+
+				/*while($row = mysql_fetch_row($qtdeBanco)){
+					print "<script>alert('qtd-> '$row[0]); </script>";
+					print "<script>alert('restante-> '$qtdeRestante); </script>";
+					$qtdeRestante = $qtdeRestante - $row[0];
+
+					print "<script>alert('sobrou -->'$qtdeRestante); </script>";
 					print 'entrou no while';
 
-					if($qtdeRestante < 0 && $flag != 1){
+					if($qtdeRestante < 0 && $flag != 1){// vc mexeu nesse sinal aqui??? mexi mas deois cploqui do jeito q tava se'r que nao tinha um igual ai?
 						$validade = $row[1];
-						$qtdeRestante = $qtdeRestante * (-1);
+
 						print 'passou aqui';
 
 						if(($row[0] - $qtdeRestante) <= 0){
 							$updateQtde = "
 											UPDATE loteprodutosbaixa set Quantidade = 0 
 											where LoteProdutosId = ".$row[2];
-							
-						
+
+
 							$updateQtde = mysql_query($updateQtde);
 
 
 							echo '0';
 						}else{
-							$updateQtde ="						 
-											UPDATE loteprodutosbaixa set Quantidade = '$row[0]' - '$qtdeRestante'
+							$ver1 = $row[3] - $qtdeRestante;
+							print "Estoque ".$ver1;
+							echo "<script>alert('qtd -> '$row[3])</script>";
+							echo "<script>alert('qtd restante ->' $qtdeRestante)</script>";
+							//$ver = $row[0] + $qtdeRestante;
+							echo ' valor gerado'.$ver;
+							//if ($ver>=0){
+								$updateQtde ="
+											UPDATE loteprodutosbaixa set Quantidade = '$row[3]' + '$qtdeRestante'
 											where LoteProdutosId = ".$row[2];
 
 
-							$updateQtde = mysql_query($updateQtde);
-							echo '1';
-							echo $updateQtde;
+								$updateQtde = mysql_query($updateQtde);
+								echo '1';
+								echo $updateQtde;
+							//}
+							else if($getQtde < $row[0]){
+
+//							$result=
+//							"select
+//									lb.Quantidade
+//								from
+//									loteprodutos l,
+//								    loteprodutosbaixa lb
+//
+//								where
+//									l.idLote = lb.LoteProdutosId
+//								    and
+//								    l.idProduto =20
+//								    and
+//								    lb.Quantidade>0;";
+
+//							$i=0;
+//							$aux=$row['Quantidade'];
+//
+//							while ($bus = mysql_fetch_array($result)){
+//								print $bus[0];
+//							}
+
+								$quant = $row[0]- $getQtde;
+
+							}
+							else
+								echo "Quantidade insuficiente";
 						}
 
 						$flag=1;
@@ -209,7 +341,7 @@ function baixaEstoque() {//dá baixa no estoque seguindo a regra de negócio
 						$updateQtde = mysql_query($updateQtde);
 //						echo '2';
 					}
-				}
+				}*/
 			}
 		}
 

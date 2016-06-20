@@ -21,15 +21,17 @@ function listarLoteProduto(){
     if(isset($_POST['pesq']))
         $pesq = $_POST['pesq']; 
 
-    $sql = "SELECT l.idLote, p.nome, c.nomeCategoria, l.valorCompra, l.qtde, l.validade, f.nome FROM loteprodutos l
+    $sql = "SELECT l.idLote, p.nome, c.nomeCategoria, l.valorCompra, baixa.Quantidade, l.validade, f.nome 
+    FROM loteprodutos l
     INNER JOIN produto p on p.idProduto=l.idProduto
+    inner join loteprodutosbaixa as baixa on baixa.LoteProdutosId = l.idLote
     LEFT JOIN categoria c on c.idCategoria=p.idCategoria
     LEFT JOIN fornecedor f on f.idFornecedor = l.idFornecedor
     WHERE (p.nome like '%$pesq%' or l.idLote like '%$pesq%' or c.nomeCategoria like '%$pesq%') 
     and l.status=1 and l.idOrganizacao=". $_SESSION['idOrganizacao'] ." 
     and p.status=1 and p.idOrganizacao=". $_SESSION['idOrganizacao'] ." 
     and c.status=1 and c.idOrganizacao=". $_SESSION['idOrganizacao'] ."
-    and f.status=1 and f.idOrganizacao=". $_SESSION['idOrganizacao'] ." order by l.validade";//<--- incluir campo de validacao
+    and f.status=1 and f.idOrganizacao=". $_SESSION['idOrganizacao'] ." order by  p.nome";//<--- incluir campo de validacao
 
     $sql = mysql_query($sql, $conexao);
 

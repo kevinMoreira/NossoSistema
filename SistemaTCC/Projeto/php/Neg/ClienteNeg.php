@@ -17,7 +17,7 @@ if(isset($_POST['nome']))
 if(isset($_POST['nome']))
     $objClienteEnt->setCpf($_POST['cpf']);
 
-if(isset($_POST['dataNasc']))
+if(isset($_POST['data_nascimento']))
     $objClienteEnt->setDataNasc($_POST['data_nascimento']);
 
 if(isset($_POST['telefone']))

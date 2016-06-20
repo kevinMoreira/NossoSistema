@@ -36,8 +36,8 @@ class ProdutoDao{
 			and 
 				nome = '".$pesq."'
 			AND
-				idOrganizacao =".$_SESSION['idOrganizacao'];
-
+				idOrganizacao = $_SESSION[idOrganizacao]";
+//		print"<script>alert('$_SESSION[idOrganizacao]')</script>";
 		$sql=mysql_query($sql, $conexao);
 
 		if(mysql_num_rows($sql) <= 0){
@@ -78,8 +78,9 @@ class ProdutoDao{
 		)
 		VALUES
 		(
+			-- ".$_SESSION[idOrganizacao].",
 			$_SESSION[idOrganizacao],
-			".$produto->getCategoriaoId().",
+			  ".$produto->getCategoriaoId().",
 			'".$produto->getNome()."',
 			".$produto->getValor().",
 			1,
@@ -101,7 +102,7 @@ class ProdutoDao{
 	{
 		session_start();
 		$conexao=AbreBancoJP();
-
+//		print "<script> alert($_SESSION[idOrganizacao]); </script>";
 		$sql="
 		UPDATE 
 			`produto`
@@ -110,11 +111,11 @@ class ProdutoDao{
 			`nome` = '".$produto->getNome()."',
 			`valorVenda` = ".$produto->getValor().",
 			`AtualizacaoDataHora` = current_timestamp(),
-			`CodigoDeBarras` =".$produto->getCodigoBarras()."
+			`CodigoDeBarras` ='".$produto->getCodigoBarras()."'
 		WHERE 
-			`idProduto` = ".$produto->getProdutoId()."
-			and 
-			`idOrganizacao` = $_SESSION[idOrganizacao]";
+			`idProduto` = ".$produto->getProdutoId().";";
+//		-- and
+//			-- `idOrganizacao` = $_SESSION[idOrganizacao]";
 
 		mysql_query($sql, $conexao);
 		$retorno = "1";
@@ -127,16 +128,27 @@ class ProdutoDao{
 		session_start();
 		$conexao=AbreBancoJP();
 
-		$sql="
-		UPDATE 
+//		$sql="
+//		UPDATE
+//			`produto`
+//		SET
+//			`status` = 0,
+//			`AtualizacaoDataHora` = current_timestamp()
+//		WHERE
+//			-- `idProduto` = ".$produto->getProdutoId()."
+//			`nome` = '".$produto->getNome()."'
+//
+//			;";
+//			and
+//			`idOrganizacao` = $_SESSION[idOrganizacao]";
+
+		$sql="UPDATE 
 			`produto`
 		SET
-			status = 0,
+			`status` = 0,
 			`AtualizacaoDataHora` = current_timestamp()
 		WHERE 
-			`idProduto` = ".$produto->getProdutoId()."
-			and 
-			`idOrganizacao` = $_SESSION[idOrganizacao]";
+			`idProduto` = ".$produto->getProdutoId().";";
 
 		mysql_query($sql, $conexao);
 		$retorno = "1";

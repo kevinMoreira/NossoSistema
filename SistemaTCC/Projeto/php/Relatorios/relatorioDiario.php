@@ -15,10 +15,8 @@ $sql = "select
             p.nome as produto,
             p.valorVenda,
             l.valorCompra,
-            iv.subTotal as Valor
-           -- c.nome as Clente
-            
-            
+            iv.subTotal as Valor,
+            ((p.valorVenda - l.valorCompra) * iv.qtde) as Lucro
         from
             venda v,
             item_venda iv,
@@ -27,7 +25,7 @@ $sql = "select
           --  cliente c
             
         where
-            v.dataVenda=current_date()
+            date(v.dataVenda)=current_date()
         and 
             v.idOrganizacao=1
         and
@@ -42,6 +40,37 @@ $sql = "select
 $sql = mysql_query($sql, $conexao);
 
 
+
+$sqlLucroTotal = "
+	select 
+	sum(ifnull(((p.valorVenda - l.valorCompra)*iv.qtde),0))  as LucroTotal
+          
+        from
+            venda v,
+            item_venda iv,
+            produto p,
+            loteprodutos l
+            
+        where
+            v.dataVenda=current_date()
+        and 
+            v.idOrganizacao=1
+        and
+            v.idVenda = iv.idVenda
+        and
+            iv.idProduto = p.idProduto
+        and 
+            l.idProduto = p.idProduto
+      ";
+
+
+//$lucroTot=0;
+//
+//$sql2 = mysql_query($sqlLucroTotal, $conexao);
+//while ($row = mysql_fetch_row($sql2)) {
+//
+//	$lucroTot = $row[0];
+//}
 
 ?>
 <html>
@@ -73,6 +102,7 @@ $sql = mysql_query($sql, $conexao);
 			<th class="tg-yw4l" id="icone">Valor da Venda</th>
 			<th class="tg-yw4l" id="icone">Valor Pago no Produto</th>
 			<th class="tg-yw4l" id="icone">Valor total</th>
+			<th class="tg-yw4l" id="icone">Lucro</th>
 
 		</tr>
 		<?php while ($row = mysql_fetch_row($sql)){ ?>
@@ -84,10 +114,56 @@ $sql = mysql_query($sql, $conexao);
 				<td class="tg-yw4l"><?php echo $row['4'] ?></td>
 				<td class="tg-yw4l"><?php echo $row['5'] ?></td>
 				<td class="tg-yw4l"><?php echo $row['6'] ?></td>
-
+				<td class="tg-yw4l"><?php echo $row['7'] ?></td>
 			</tr>
 		<?php }?>
 	</table>
+
+<br>
+	<br>
+
+	<!-- <table class="tg">
+		<tr>
+			<th class="tg-yw4l" id="icone"></th>
+			<th class="tg-yw4l" id="icone"></th>
+			<th class="tg-yw4l" id="icone"></th>
+			<th class="tg-yw4l" id="icone"></th>
+			<th class="tg-yw4l" id="icone"></th>
+			<th class="tg-yw4l" id="icone"></th>
+			<th class="tg-yw4l" id="icone"></th>
+			<th class="tg-yw4l" id="icone"></th>
+			<th class="tg-yw4l" id="icone">Lucro Total</th>
+		</tr>
+		<tr>
+			<td class="tg-yw4l" id="icone"></td>
+			<td class="tg-yw4l" id="icone"></td>
+			<td class="tg-yw4l" id="icone"></td>
+			<td class="tg-yw4l" id="icone"></td>
+			<td class="tg-yw4l" id="icone"></td>
+			<td class="tg-yw4l" id="icone"></td>
+			<td class="tg-yw4l" id="icone"></td>
+			<td class="tg-yw4l" id="icone"></td>
+			<td class="tg-yw4l" id="icone"><?php echo $lucroTot ?></td>
+		</tr>
+	</table>
+-->
+<br>
+
+	<style type="text/css">
+		.tg  {border-collapse:collapse;border-spacing:0;}
+		.tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
+		.tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
+	</style>
+<!--	<table class="tg">-->
+<!--		<tr>-->
+<!--			<th class="tg-031e">Lucro Total</th>-->
+<!--			<td class="tg-031e">--><?php //echo $lucroTot ?><!--</td>-->
+<!--<!--		</tr>-->
+<!--<!--		-->
+<!--<!--		<tr>-->
+<!---->
+<!--		</tr>-->
+<!--	</table>-->
 </center>
 </body>
 </html>
