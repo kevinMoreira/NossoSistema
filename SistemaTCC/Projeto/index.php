@@ -42,7 +42,7 @@
         </form>
     </div>
     <div id="footer">
-        <h6>©<?php echo date('Y');?> Desenvolvido por João Paulo</h6>
+        <h6>©<?php echo date('Y');?> Desenvolvido por João Paulo e Kevin Rangel</h6>
     </div>
 
 </div>
