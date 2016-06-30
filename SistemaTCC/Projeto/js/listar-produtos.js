@@ -27,6 +27,7 @@ function busca() {
             DOM.newText('Codigo'),
             DOM.newText('Nome'),
             DOM.newText('Categoria'),
+            DOM.newText('Total')
         ]);
         var json = JSON.parse(retorna);
 
@@ -36,6 +37,7 @@ function busca() {
                 DOM.newText(json[i].codigo),
                 DOM.newText(json[i].nome),
                 DOM.newText(json[i].nomeCategoria),
+                DOM.newText(json[i].total),
             ]);
         }
 

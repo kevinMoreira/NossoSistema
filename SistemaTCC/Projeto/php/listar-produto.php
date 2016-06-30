@@ -21,12 +21,23 @@ function listarProduto(){
     if(isset($_POST['pesq']))
         $pesq = $_POST['pesq']; 
 
-    $sql = "SELECT p.idProduto, p.nome, c.nomeCategoria FROM produto p
-    INNER JOIN categoria c on c.idCategoria=p.idCategoria
-    WHERE (p.nome like '%$pesq%' or p.idProduto like '%$pesq%' or c.nomeCategoria like '%$pesq%') 
-    and p.status=1 and p.idOrganizacao=". $_SESSION['idOrganizacao'] ."
-    and c.status=1 and c.idOrganizacao=". $_SESSION['idOrganizacao'] ."
-    GROUP BY p.idProduto order by p.nome";
+    $sql = "SELECT p.idProduto, p.nome, c.nomeCategoria, sum(lb.Quantidade) as total
+	FROM produto p,
+    loteprodutosbaixa lb,
+	loteprodutos lp,
+	categoria c
+   where  c.idCategoria=p.idCategoria
+
+    and  (p.nome like '%$pesq%' or p.idProduto like '%$pesq%' or c.nomeCategoria like '%$pesq%')
+    and p.status=1
+	and p.idOrganizacao=". $_SESSION['idOrganizacao'] ."
+    and c.status=1
+	and c.idOrganizacao=". $_SESSION['idOrganizacao'] ."
+    and
+    	p.idProduto = lp.idProduto
+	and
+	lb.LoteProdutosId = lp.idLote
+    GROUP BY p.idProduto order by p.nome;";
     
     $sql = mysql_query($sql, $conexao);
 
@@ -42,6 +53,7 @@ function listarProduto(){
             'codigo' => $row['0'],
             'nome' => $row['1'], 
             'nomeCategoria' => $row['2'],
+            'total' => $row['3'],
         );    
     }
 
