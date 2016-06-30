@@ -41,7 +41,7 @@
         $tabela .= "<td colspan=4 align=center><input type='submit' value='Selecionar'></td></tr></table></form>";
         
         echo $tabela;
-        ?>
+?>
     </body>
 
 </html>

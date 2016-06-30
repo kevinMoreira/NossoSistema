@@ -46,7 +46,7 @@ function Login() {
     }
 
     if (ajax.getResponseText() == '1') {
-        window.location = 'principal.html';
+        window.location = 'principal2.php';
     }
 };
 

@@ -4,6 +4,8 @@ window.onload = function() {
     MontaMenu();
     getDadosUsuario();
     buscaTotalVendaSemana();
+   /* window.open('php/mostraVencidos.php');*/
+   // window.open('http://www.google.com.br');
     //teste();
 };
 
@@ -245,4 +247,20 @@ function desenhaGrafico(arrayX, arrayY) {
 
     //Inclui a legenda do gráfico
     legend(document.getElementById("lineLegend"), data);
+
+
+ /*   function exibirQtdDisponivel(){
+            var produto prompt("Digite o nome do Produto", "Produtos");
+
+            var ajax = new Ajax('POST', 'php/buscaQtd.php', false);
+
+            var p='action=gerarGrafico'+produto;
+
+            ajax.Request(p);
+
+            //var json = JSON.parse(ajax.getResponseText());
+
+            //alert(ajax.getResponseText());
+
+    }*/
 }
