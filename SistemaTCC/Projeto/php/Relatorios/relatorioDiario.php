@@ -52,7 +52,7 @@ $sqlLucroTotal = "
             loteprodutos l
             
         where
-            v.dataVenda=current_date()
+            date(v.dataVenda)=current_date()
         and 
             v.idOrganizacao=1
         and
@@ -64,13 +64,13 @@ $sqlLucroTotal = "
       ";
 
 
-//$lucroTot=0;
-//
-//$sql2 = mysql_query($sqlLucroTotal, $conexao);
-//while ($row = mysql_fetch_row($sql2)) {
-//
-//	$lucroTot = $row[0];
-//}
+$lucroTot=0;
+
+$sql2 = mysql_query($sqlLucroTotal, $conexao);
+while ($row = mysql_fetch_row($sql2)) {
+
+	$lucroTot = $row[0];
+}
 
 ?>
 <html>
@@ -122,7 +122,7 @@ $sqlLucroTotal = "
 <br>
 	<br>
 
-	<!-- <table class="tg">
+<!--	 <table class="tg">
 		<tr>
 			<th class="tg-yw4l" id="icone"></th>
 			<th class="tg-yw4l" id="icone"></th>
@@ -145,8 +145,8 @@ $sqlLucroTotal = "
 			<td class="tg-yw4l" id="icone"></td>
 			<td class="tg-yw4l" id="icone"><?php echo $lucroTot ?></td>
 		</tr>
-	</table>
--->
+	</table>-->
+
 <br>
 
 	<style type="text/css">
@@ -154,16 +154,16 @@ $sqlLucroTotal = "
 		.tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
 		.tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
 	</style>
-<!--	<table class="tg">-->
-<!--		<tr>-->
-<!--			<th class="tg-031e">Lucro Total</th>-->
-<!--			<td class="tg-031e">--><?php //echo $lucroTot ?><!--</td>-->
-<!--<!--		</tr>-->
-<!--<!--		-->
-<!--<!--		<tr>-->
-<!---->
-<!--		</tr>-->
-<!--	</table>-->
+	<table class="tg">
+		<tr>
+			<th class="tg-031e">Lucro Total</th>
+			<td class="tg-031e"><?php echo $lucroTot ?></td>
+		</tr>
+
+		<tr>
+
+		</tr>
+	</table>
 </center>
 </body>
 </html>
