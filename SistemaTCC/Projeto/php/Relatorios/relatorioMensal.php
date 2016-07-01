@@ -10,18 +10,14 @@ include '../sistemaJP.php';
 $conexao = AbreBancoJP();
 ob_start();
 $sql = "select 
-           v.idVenda as NumeroVenda , 
+            v.idVenda as NumeroVenda ,
             v.dataVenda as dataHora,
             iv.qtde as quantidade,
             p.nome as produto,
             p.valorVenda,
             l.valorCompra,
             iv.subTotal as Valor,
-          
             ((p.valorVenda - l.valorCompra) * iv.qtde) as Lucro
-           -- c.nome as Clente
-            
-            
         from
             venda v,
             item_venda iv,
@@ -30,20 +26,51 @@ $sql = "select
           --  cliente c
             
         where
-           month(v.dataVenda)= month(current_date())
-         and 
+            month(v.dataVenda)=month(current_date())
+        and
             v.idOrganizacao=1
         and
             v.idVenda = iv.idVenda
         and
             iv.idProduto = p.idProduto
         and 
-            l.idProduto = p.idProduto;";
+            l.idProduto = p.idProduto;
+        -- and";
 
 $sql = mysql_query($sql, $conexao);
 
+//lucro total
+
+$sqlLucroTotal = "
+	select
+	sum(ifnull(((p.valorVenda - l.valorCompra)*iv.qtde),0))  as LucroTotal
+
+        from
+            venda v,
+            item_venda iv,
+            produto p,
+            loteprodutos l
+
+        where
+            date(v.dataVenda)=current_date()
+        and
+            v.idOrganizacao=1
+        and
+            v.idVenda = iv.idVenda
+        and
+            iv.idProduto = p.idProduto
+        and
+            l.idProduto = p.idProduto
+      ";
 
 
+$lucroTot=0;
+
+$sql2 = mysql_query($sqlLucroTotal, $conexao);
+while ($row = mysql_fetch_row($sql2)) {
+
+	$lucroTot = $row[0];
+}
 ?>
 <html>
 <head>
@@ -74,6 +101,7 @@ $sql = mysql_query($sql, $conexao);
             <th class="tg-yw4l" id="icone">Valor da Venda</th>
             <th class="tg-yw4l" id="icone">Valor Pago no Produto</th>
             <th class="tg-yw4l" id="icone">Valor total</th>
+            <th class="tg-yw4l" id="icone">Lucro</th>
 
         </tr>
         <?php while ($row = mysql_fetch_row($sql)){ ?>
@@ -85,7 +113,8 @@ $sql = mysql_query($sql, $conexao);
                 <td class="tg-yw4l"><?php echo $row['4'] ?></td>
                 <td class="tg-yw4l"><?php echo $row['5'] ?></td>
                 <td class="tg-yw4l"><?php echo $row['6'] ?></td>
-                <?php  $lucroTot =  $row['7'] ?>
+                 <td class="tg-yw4l"><?php echo $row['7'] ?></td>
+               <!-- <td class="tg-yw4l"> <?php // $lucroTot =  $row['7'] ?></td>-->
             </tr>
         <?php }?>
     </table>
