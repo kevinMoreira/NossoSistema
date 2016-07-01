@@ -29,7 +29,13 @@ $sql = "select
           --  cliente c
             
         where
-            v.dataVenda>current_date()-7
+           -- v.dataVenda> current_timestamp()
+           YEAR(v.dataVenda) = YEAR(now())
+			 	and
+                 MONTH ( v.dataVenda ) = MONTH ( now() )
+                 and
+                  DAYOFWEEK ( v.dataVenda ) <= (DAYOFWEEK ( now()-7))
+
          and 
             v.idOrganizacao=1
         and
@@ -42,6 +48,40 @@ $sql = "select
         -- 	v.idCliente = c.idCliente;";
 
 $sql = mysql_query($sql, $conexao);
+
+
+//lucro total
+
+$sqlLucroTotal = "
+	select
+	sum(ifnull(((p.valorVenda - l.valorCompra)*iv.qtde),0))  as LucroTotal
+
+        from
+            venda v,
+            item_venda iv,
+            produto p,
+            loteprodutos l
+
+        where
+            date(v.dataVenda)=current_date()
+        and
+            v.idOrganizacao=1
+        and
+            v.idVenda = iv.idVenda
+        and
+            iv.idProduto = p.idProduto
+        and
+            l.idProduto = p.idProduto
+      ";
+
+
+$lucroTot=0;
+
+$sql2 = mysql_query($sqlLucroTotal, $conexao);
+while ($row = mysql_fetch_row($sql2)) {
+
+	$lucroTot = $row[0];
+}
 
 
 
@@ -75,6 +115,7 @@ $sql = mysql_query($sql, $conexao);
             <th class="tg-yw4l" id="icone">Valor da Venda</th>
             <th class="tg-yw4l" id="icone">Valor Pago no Produto</th>
             <th class="tg-yw4l" id="icone">Valor total</th>
+            <th class="tg-yw4l" id="icone">Lucro</th>
 
         </tr>
         <?php while ($row = mysql_fetch_row($sql)){ ?>
@@ -86,7 +127,8 @@ $sql = mysql_query($sql, $conexao);
                 <td class="tg-yw4l"><?php echo $row['4'] ?></td>
                 <td class="tg-yw4l"><?php echo $row['5'] ?></td>
                 <td class="tg-yw4l"><?php echo $row['6'] ?></td>
-                <?php  $lucroTot =  $row['7'] ?>
+                <td class="tg-yw4l"><?php echo $row['7'] ?></td>
+               <!-- <?php/*  $lucroTot =  $row['7']*/ ?>-->
             </tr>
         <?php }?>
     </table>
@@ -104,13 +146,13 @@ $sql = mysql_query($sql, $conexao);
     .tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
     .tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
 </style>
-<!--<table class="tg">-->
-<!--    <tr>-->
-<!--        <th class="tg-031e">Lucro Total</th>-->
-<!--        <td class="tg-031e">--><?php //echo $lucroTot ?><!--</td>-->
-<!--    </tr>-->
-<!---->
-<!--</table>-->
+<table class="tg">
+    <tr>
+        <th class="tg-031e">Lucro Total</th>
+        <td class="tg-031e"><?php echo $lucroTot ?></td>
+    </tr>
+
+</table>
 </center>
 </body>
 </html>
