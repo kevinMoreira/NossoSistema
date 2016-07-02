@@ -65,6 +65,13 @@ function setDados() {
 
     var json = JSON.parse(ajax.getResponseText());
     var qtde = document.getElementById('qtde').value;
+    var q =  json[0].qtd;
+   /* alert(q);
+    alert(qtde);*/
+    if (q<=qtde){
+        alert("quantidade insuficiente");
+        return;
+    }
     var _preco = json[0].preco;
     var _subtotal = _preco * qtde;
     var getTotal = 0;
