@@ -1,3 +1,4 @@
+
 var tableNota = new Table('tableNota');
 
 window.onload = function () {
